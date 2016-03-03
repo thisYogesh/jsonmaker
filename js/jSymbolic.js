@@ -53,7 +53,7 @@
                     })(sel);
                 } else {
                     this.oldObject = true; // asign true to .oldObject, to know that we are working on old object
-                    this.return = null; // asign null to .return, since when $S._ function initiate next time.
+                    this.return = undefined; // asign null to .return, since when $S._ function initiate next time.
                     this.symbols = args[0];
                     this.op = args[1];
                 }
@@ -72,7 +72,7 @@
                     this.createEle(this.symbols, this.op);
                 }
             }
-            if(!this.return){
+            if(this.return == undefined){
                 var currentContext = this.getEle();
                 if(this.length > 0) am.splice.call(this,0); // remove the elements if there any
                 if(currentContext.length > 0){
@@ -83,7 +83,7 @@
                     am.push.call(this, currentContext);
                 }
             }
-            return this.oldObject ? this.return ? this.return : this : this;
+            return this.oldObject ? this.return != undefined ? this.return : this : this;
         },
         sym_to_fn: function () {
             var fn = this.filterSymbols(this.symbols, this.op);
@@ -341,6 +341,15 @@
                 e.className = svc.join(' ');
             }
         },
+        _hClass : function(e, args, op){
+            var classess = $S(e, "@{class}");
+            classess = classess ? classess.split(" ") : [];
+            if(classess.indexOf(args.trim()) > -1){
+                this.setReturn(e, { hasClass:true });
+            }else{
+                this.setReturn(e, { hasClass:false });
+            }
+        },
         remove: function (e) {
             e.remove();
         },
@@ -486,7 +495,7 @@
             });
             if(args.val){
                 this.dataget(e, args.val)
-                this.setReturn(e, args.val);
+                this.setReturn(e, aregs.val);
             }
         },
         dataget : function(e, args){ // get dataset properties
@@ -606,6 +615,7 @@
         { fun: 'css', symbol: '&', symPara: 'MULTI', symType: 'opt' },                      // CSS
         { fun: '_class', symbol: '&+', symPara: 'MULTI', symType: 'opt', symFor: '+' },     // add CSS class
         { fun: '_class', symbol: '&x', symPara: 'MULTI', symType: 'opt', symFor: 'x' },     // remove CSS class
+        { fun: '_hClass', symbol: '&h', symPara: 'MULTI', symType: 'opt' },                 // check has class
         { fun: 'symEvent', symbol: '+=', symPara: 'MULTI', symType: 'opt' },                // bind event
         { fun: 'symEvent', symbol: '-=', symPara: 'MULTI', symType: 'opt' },                // unbind event
         { fun: 'val', symbol: '%', symPara: 'MULTI', symType: 'opt'},                       // return value of input elements

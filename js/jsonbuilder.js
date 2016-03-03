@@ -23,10 +23,11 @@ function json_object(op){
 		if(this.parent.type == "Array"){
 			this.parent.JSON.push(this.JSON);
 		}else if(this.parent.type == "Object"){
-			this.parent.JSON[op.key] = this.JSON;
+			if(op.key){
+				this.superParent[this.name] = this;
+				this.parent.JSON[op.key] = this.JSON;
+			}
 		}
-		if(op.key)
-			this.superParent[this.name] = this;
 	}else if(!this.parent){ // main superparent parent
 		this.parent = null;
 		this.superParent = this;
@@ -50,6 +51,8 @@ json_object.ext = function(methods){
 };
 json_object.ext({
 	add : function(key, val){
+		key = key || "";
+		val = val || "";
 		if(this.type == "Array"){
 			new this.constructor({
 				type : key,
@@ -97,33 +100,49 @@ json_object.ext({
 		this.type = type;
 		this.constructor(this);
 	},
+	setKey : function(key){
+		if(key){
+			this.name += key;
+			this.superParent[this.name] = this;
+			this.parent.JSON[key] = this.JSON;
+		}
+	},
 	json : function(){
 		return this.JSON;
 	}
 });
 
 function json_view(json_object){
-	var _this = this, 
+	var _this = this,
 	html = "",
-	is_object = json_object.parent && json_object.type == "Object";
+	is_object = json_object.parent && json_object.parent.type == "Object",
+	is_array = json_object.parent && json_object.parent.type == "Array";
+
 	_this.json_object = json_object;
 
 	if(is_object){
 		html += "<div class='key_holder'>" +
 					"<div class='key_row'>" +
-						"<div class='key'>Name</div>" +
+						"<div class='key'>" +
+							"<span class='objtxt' contenteditable></span>" +
+						"</div>" +
+						"<div class='val'>";
+	}else if(is_array){	
+		html += "<div class='key_holder'>" +
+					"<div class='key_row'>" +
 						"<div class='val'>";
 	}
 	html += 	"<div class='json_block'>";
-	//if(json_object.type == null){
+	
 	html += _this.json_init(json_object);
-	/*}else if(json_object.type != null){
-		html +=	_this.key_field(json_object);	
-	}*/
+	
 	html += "</div>";
 	if(is_object){
 		html +=		"</div>" +
 				"</div>" +
+			"</div>";
+	}else if(is_array){	
+		html +=	"</div>" +
 			"</div>";
 	}
 	_this.html = $('<->',html)._('?{.json_init}.+={click,0}.?{.op}.+={click,1}....',[
@@ -133,6 +152,13 @@ function json_view(json_object){
 			_this.option_controller.bind(this)(e, _this);
 		}
 	])[0];
+
+	if(is_object){
+		$(_this.html, '?{.objtxt}.+={blur}', function(e){
+			_this.setKey.bind(this)(e, _this);
+		});
+	}
+
 	if(!json_object.parent){
 		$(json_object.parent_el,'>+{0}',[_this.html]);
 	}else{
@@ -191,25 +217,34 @@ json_view.ext({
 		return html;
 	},
 	option_controller : function(e, _this){
-		var el = $(this),
-		oType = el._('@{class}').split(" ");
-		if(oType.indexOf("_Object") > -1){
+		var el = $(this);
+		if(el._("&h{_Object}")){
 			_this.json_object.setType({});
-			$(_this.html,'&x{iarr}.&+{iobj}');
-		}else if(oType.indexOf("_Array") > -1){
+			if( $(_this.html, '&h{json_block}') ){
+				$(_this.html,'&x{iarr}.&+{iobj}');
+			}else{
+				$(_this.html,'?{.json_block}.&x{iarr}.&+{iobj}');
+			}
+		}else if(el._("&h{_Array}")){
 			_this.json_object.setType([]);
-			$(_this.html,'&x{iobj}.&+{iarr}');
-		}else if(oType.indexOf("_String") > -1){
+			if( $(_this.html, '&h{json_block}') ){
+				$(_this.html,'&x{iobj}.&+{iarr}');
+			}else{
+				$(_this.html,'?{.json_block}.&x{iobj}.&+{iarr}');
+			}
+		}else if(el._("&h{_String}")){
 			_this.json_object.setType({val : ""});
 			$(_this.html,'&x{iarr iobj}');
-		}else if(oType.indexOf("_Number") > -1){
+		}else if(el._("&h{_Number}") > -1){
 			_this.json_object.setType({val : 0});
 			$(_this.html,'&x{iarr iobj}');
 		}
 		el._('^.&x{show}');
 
 		if(_this.json_object.type == "Object"){
-			_this.json_object.add("",{});
+			_this.json_object.add();
+		}else if(_this.json_object.type == "Array"){
+			_this.json_object.add();
 		}
 
 		console.log(_this.json_object);
@@ -217,6 +252,12 @@ json_view.ext({
 	},
 	open_option : function(e, _this){
 		$(this,'?{.json_op}.&+{show}');
+	},
+	setKey : function(e, _this){
+		var key = $(this,',');
+		if(key){
+			_this.json_object.setKey(key)
+		}
 	}
 });
 
