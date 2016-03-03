@@ -274,7 +274,7 @@
         },
         after: function (e, tempVar) {
             var cont = tempVar;
-            var newEle = (cont.nodeType || cont instanceof jSymbolic) ? cont : this.strToHtml(cont);
+            var newEle = this.strToHtml(cont);
             if (e.nextSibling) this.prnd(e.nextSibling, newEle);
             else this.apnd(e.parentNode, newEle);
         },
