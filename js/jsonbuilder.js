@@ -93,7 +93,7 @@ json_object.ext({
 		}else if(this.type == "Number"){
 			return {number : op.val};
 		}else{
-			return null;
+			return {};
 		}
 	},
 	setType : function(type){
@@ -101,14 +101,12 @@ json_object.ext({
 		this.constructor(this);
 	},
 	setKey : function(key){
-		if(key){
-			this.name += key;
+		if(key && !this.key){
+			this.key = key;
+			this.name += this.key;
 			this.superParent[this.name] = this;
 			this.parent.JSON[key] = this.JSON;
 		}
-	},
-	json : function(){
-		return this.JSON;
 	}
 });
 
