@@ -16,6 +16,12 @@
     font-weight: 400;
     outline: none;
 }
+.show{
+    display: block!important;
+}
+.hide{
+    display: none;
+}
 .json_init {
     font-size: 11px;
     padding: 2px;
@@ -101,8 +107,9 @@
     font-size: 11px;
 }
 .objtxt[contenteditable]{
-    background-color: #fff;
     display: inline-block;
+    position: relative;
+    z-index: 1;
 }
 .val.obj:after {
     content: "";
@@ -157,9 +164,24 @@
 .json_op > .op:hover {
     color: #000;
 }
-.show{
-    display: block;
+.json_block {
+    position: relative;
 }
-.hide{
-    display: none;
+.add_obj {
+    position: absolute;
+    bottom: 1px;
+    left: 12px;
+    background-image: url('../images/add.png');
+    height: 12px;
+    width: 12px;
+    background-size: 8px;
+    background-color: #FFF;
+    background-position: center;
+    border: 1px solid #ddd;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.objtxt:active,.objtxt:focus {
+    background: #fff;
 }
