@@ -49,8 +49,9 @@
                         }else{
                             val = sel;
                         }
+                        this.setCtx(val);
                         return val;
-                    })(sel);
+                    }.bind(this))(sel);
                 } else {
                     this.oldObject = true; // asign true to .oldObject, to know that we are working on old object
                     this.return = undefined; // asign null to .return, since when $S._ function initiate next time.
@@ -72,17 +73,6 @@
                     this.createEle(this.symbols, this.op);
                 }
             }
-            if(this.return == undefined){
-                var currentContext = this.getEle();
-                if(this.length > 0) am.splice.call(this,0); // remove the elements if there any
-                if(currentContext.length > 0){
-                    this.for(currentContext, function(a,b,c,d){
-                        am.push.call(this, a);
-                    });
-                }else if(currentContext.nodeType){
-                    am.push.call(this, currentContext);
-                }
-            }
             return this.oldObject ? this.return != undefined ? this.return : this : this;
         },
         sym_to_fn: function () {
@@ -100,11 +90,32 @@
                         if(this.fn.symType != "rctx"){
                             this.fn.symType == "context" ? this.IFC = true : this.IFC;
                             for( var x = 0; x < ele.length; x++ ){
-                                this.IFC ? el.push(this[this.fn.fun](ele[x])) : this[this.fn.fun](ele[x]);
+                                if(this.IFC) {
+                                        var elm = this[this.fn.fun](ele[x], this.fn.param, this.op);
+                                        if(elm.length > 0){
+                                            elm = this.cleanObject(elm);
+                                            for(var i=0; i<elm.length; i++){
+                                                if(el.indexOf(elm[i]) == -1){
+                                                    el.push(elm[i]);
+                                                }
+                                            }
+                                        }else{
+                                            if(el.indexOf(elm) == -1){
+                                                el.push(elm);
+                                            }
+                                        }
+                                    }else{
+                                        this[this.fn.fun](ele[x],this.fn.param, this.op);
+                                    }
                             }
                             this.IFC = false;
 
-                            if(el.length > 0) this.setCtx(el.clean());
+                            //if(el.length > 0) this.setCtx(el.clean());
+                            if(el.length > 0) {
+                                el = el.clean();
+                                el = this.cleanObject(el);
+                                this.setCtx(el);
+                            }
                         }else if(this.fn.symType == "rctx"){
                             this[this.fn.fun]();
                         }
@@ -120,12 +131,28 @@
                                 this[this.fn.fun](ele, this.fn.param, this.op);
                             }else{
                                 for( var x = 0; x < ele.length; x++ ){
-                                    this.IFC ? el.push(this[this.fn.fun](ele[x], this.fn.param, this.op)) :this[this.fn.fun](ele[x],this.fn.param, this.op);
+                                    if(this.IFC) {
+                                        var elm = this[this.fn.fun](ele[x], this.fn.param, this.op);
+                                        if(elm.length > 0){
+                                            elm = this.cleanObject(elm);
+                                            for(var i=0; i<elm.length; i++){
+                                                if(el.indexOf(elm[i]) == -1){
+                                                    el.push(elm[i]);
+                                                }
+                                            }
+                                        }else{
+                                            if(el.indexOf(elm) == -1){
+                                                el.push(elm);
+                                            }
+                                        }
+                                    }else{
+                                        this[this.fn.fun](ele[x],this.fn.param, this.op);
+                                    }
                                 }
                             }
                             this.IFC = false;
                             if(el.length > 0) {
-                                el.clean();
+                                el = el.clean();
                                 el = this.cleanObject(el);
                                 this.setCtx(el);
                             }
@@ -159,7 +186,26 @@
             return this.subCtx.length == 0 ? this.mainCtx : this.subCtx.last();
         },
         setCtx : function(e){
+            if(e)
             !this.mainCtx ? this.mainCtx = e : this.subCtx.push(e);
+
+            if(e.nodeType){
+                while(this.length != 0){
+                    Array.prototype.pop.call(this);
+                }
+                Array.prototype.push.call(this,e);
+            }else if(e.length > 0){
+                while(this.length != 0){
+                    Array.prototype.pop.call(this);
+                }
+                for(var i=0; i < e.length; i++){
+                    Array.prototype.push.call(this, e[i]);
+                }
+            }else {
+                while(this.length != 0){
+                    Array.prototype.pop.call(this);
+                }
+            }
         },
         filterSymbols : function(symbolStr, op){
             op = op || {};
@@ -179,7 +225,6 @@
                 }
                 for(var i2=0; i2<sData.length; i2++){
                     if(sym == sData[i2].symbol || (function(){ if(sData[i2].rgx == '1') return new RegExp(sData[i2].symbol).test(sym)})()){
-                    //if(sym == sData[i2].symbol){
                         var fndata = new JSONs.prototype.clone(sData[i2]);
                         symbolicData.push(fndata);
                         if( /\{/.test(symbolStr[i])){
@@ -225,8 +270,7 @@
                 e = e.nextSibling;
             }
             e = e.nextSibling;
-            if (!this.IFC) e ? this.setCtx(e) : e; else return e;
-            //if (!this.IFC) e ? am.push.call(this, e) : e; else return e;
+            if (!this.IFC) this.setCtx(e); else return e;
         },
         prev: function (e) {
             while(e.previousSibling && e.previousSibling.nodeType == 3){
@@ -238,6 +282,47 @@
         parent: function (e) {
             e = e.parentNode;
             if (!this.IFC) e ? this.setCtx(e) : e; else return e;
+        },
+        cloParent: function(e, args, op){
+            //args = this.formateArg(args, op);
+            var toCompare = args,
+            el = e,
+            selectorType = function(){
+                var c = args.substr(0,1);
+                if(c == "#") {
+                    toCompare = toCompare.substr(1);
+                    return "Id";
+                }
+                else if(c == ".") {
+                    toCompare = toCompare.substr(1);
+                    return "Class";
+                }
+                else return "Node";
+            }(),
+            found = true;
+            if(selectorType == "Id"){
+                this.IFC = true;
+                var p;
+                while(found){
+                    p = el = this.parent(el);
+                    if(p && p.nodeType == 1){
+                        var id = this.getAttr(p, {id:""}).id;
+                        if(id == toCompare){
+                            found = false;
+                        }
+                    }else{
+                        break;
+                    }
+                }
+                this.IFC = false;
+                if(!found){
+                    this.setCtx(p);
+                };
+            }else if(selectorType == "Class"){
+
+            }else if(selectorType == "Node"){
+
+            }
         },
         childs: function (e) {
             e = e.children;
@@ -297,6 +382,19 @@
                 len = len > this.subCtx.length ? 0 : len;
             } else len = this.subCtx.length;
             if (this.subCtx) this.subCtx.splice(this.subCtx.length - len);
+            var cx = this.getEle();
+            // cleaning context
+            while(this.length != 0){
+                Array.prototype.pop.call(this);
+            }
+            
+            if(cx.length){
+                for(var i=0; i<cx.length; i++){
+                    Array.prototype.push.call(this,cx[i]);
+                }
+            }else{
+                Array.prototype.push.call(this,cx);
+            }
         },
         attr: function (e, attr, obj) {
             attr = this.formateArg(attr, obj);
@@ -597,6 +695,7 @@
         { fun: 'nxt', symbol: '>', symPara: 'MONO', symType: 'context' },                   // next
         { fun: 'prev', symbol: '<', symPara: 'MONO', symType: 'context' },                  // previous
         { fun: 'parent', symbol: '^', symPara: 'MONO', symType: 'context' },                // parent
+        { fun: 'cloParent', symbol: '^^', symPara: 'MULTI', symType: 'context' },            // finding closest parent
         { fun: 'after', symbol: '>|', symPara: 'MULTI', symType: 'opt' },                   // after
         { fun: 'before', symbol: '|<', symPara: 'MULTI', symType: 'opt' },                  // before
         { fun: 'find', symbol: '?', symPara: 'MULTI', symType: 'context' },                 // find
@@ -696,7 +795,8 @@
                     }
                 });
             });
-            this.setReturn(e, attr);
+            if(!this.IFC) this.setReturn(e, attr)
+            else return attr;
         },
         removeAttr: function (e, attr) {
             this.forEach(attr.val, function(a,b){
@@ -963,7 +1063,7 @@ Array.ext({
     clean : function () {
 		var a=[];
         for (var x = 0; x < this.length; x++) {
-			if( this[x] != "" && this[x] != null && this[x] != undefined ){
+			if( this[x] != "" && this[x] != null && this[x] != undefined && this[x].length != 0){
 				a.push(this[x]);
 			}
         }

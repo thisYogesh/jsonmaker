@@ -12,7 +12,7 @@
 	-khtml-box-sizing:border-box;
 	list-style:none;
 	text-decoration:none;
-    font-family: 'Inconsolata';
+    font-family: 'Inconsolata',"Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 400;
     outline: none;
 }
@@ -185,3 +185,20 @@
 .objtxt:active,.objtxt:focus {
     background: #fff;
 }
+.objval:active,.objval:focus {
+    background: #fff;
+}
+.objval {
+    border: 1px solid #ddd;
+    min-width: 10px;
+    border-radius: 2px;
+    vertical-align: middle;
+    padding: 2px;
+    font-size: 11px;
+}
+.objval[contenteditable]{
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+}
+.val.nonobj > .json_block{display: inline;}
