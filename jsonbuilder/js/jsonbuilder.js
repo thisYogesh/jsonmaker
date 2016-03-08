@@ -62,7 +62,7 @@ json_object.ext({
 		val = val || undefined;
 		if(this.type == "Array"){
 			if(this.parent)
-			$(this.view.html,'?{>.val}.&+{obj}');
+			$(this.view.html,'?{>.val}.&x{nonobj}.&+{obj}');
 			this.val = new this.constructor({
 				type : key,
 				parent : this,
@@ -72,7 +72,7 @@ json_object.ext({
 			});
 		}else if(this.type == "Object"){
 			if(this.parent)
-			$(this.view.html,'?{>.val}.&+{obj}');
+			$(this.view.html,'?{>.val}.&x{nonobj}.&+{obj}');
 			this.val = new this.constructor({
 				type : val,
 				parent : this,
@@ -147,7 +147,7 @@ json_object.ext({
 	},
 	add_sibling : function(){
 		//console.log(this);
-		this.add();
+		this.parent.add();
 	}
 });
 
@@ -157,26 +157,27 @@ function json_view(json_object){
 	is_object = json_object.parent && json_object.parent.type == "Object",
 	is_array = json_object.parent && json_object.parent.type == "Array",
 	is_string = json_object.parent && json_object.parent.type == "String",
-	is_number = json_object.parent && json_object.parent.type == "Number";
+	is_number = json_object.parent && json_object.parent.type == "Number",
+	is_firstChild = json_object.parent && json_object.parent.child.length == 1;
 
 	_this.json_object = json_object;
 
 	if(is_object || is_array){	
 		if(is_object){
-			if(json_object.parent.child.length == 0){
-				html += "<div class='key_holder'>";
-			}
-			html += 	"<div class='key_row'>" +
+			if(is_firstChild)
+			html += "<div class='key_holder'>";
+
+			html +=		"<div class='key_row'>" +
 							"<div class='key'>" +
 								"<span class='objtxt' contenteditable></span>" +
 							"</div>" +
-							"<div class='val'>";
-		}else if(is_array){	
-			if(json_object.parent.child.length == 0){
-				html += "<div class='key_holder'>";
-			}
-			html += 	"<div class='key_row'>" +
-							"<div class='val'>";
+							"<div class='val nonobj'>";
+		}else if(is_array){
+			if(is_firstChild)
+			html += "<div class='key_holder'>";
+
+			html +=		"<div class='key_row'>" +
+							"<div class='val nonobj'>";
 		}
 	}
 	
@@ -193,14 +194,12 @@ function json_view(json_object){
 		if(is_object){
 			html +=			"</div>" +
 						"</div>";
-			if(json_object.parent.child.length == 0){
-				html += "</div>";
-			}
+			if(is_firstChild)
+					"</div>";
 		}else if(is_array){	
 			html +=	"</div>";
-			if(json_object.parent.child.length == 0){
-				html += "</div>";
-			}
+			if(is_firstChild)
+				"</div>";
 		}
 	}
 
@@ -227,7 +226,7 @@ function json_view(json_object){
 	if(!json_object.parent){ // superParent
 		$(json_object.parent_el,'>+{0}',[_this.html]);
 	}else{
-		if(json_object.parent.child.length == 1){ //$(_this.html,'&h{key_holder}')
+		if(is_firstChild){
 			if(is_object || is_array){
 				var add_sibling = "<div class='add_obj'></div>";
 				add_sibling = $('<->',add_sibling)._('+={click}',function(e){
@@ -241,7 +240,11 @@ function json_view(json_object){
 				$(json_object.parent_el,'?{.json_init}.>|{0}.x',[_this.html]);
 			}
 		}else{
-			$(json_object.parent_el,'?{.json_init}.>|{0}.x',[_this.html]);
+			if(!json_object.parent.parent){
+				$(json_object.parent_el,'?{>.key_holder}.>+{0}',[_this.html]);
+			}else{
+				$(json_object.parent_el,'?{>.val >.json_block >.key_holder}.>+{0}',[_this.html]);
+			}
 		}
 	}
 	return _this;

@@ -105,6 +105,7 @@
     vertical-align: middle;
     padding: 2px;
     font-size: 11px;
+    background: #fff;
 }
 .objtxt[contenteditable]{
     display: inline-block;
@@ -169,11 +170,11 @@
 }
 .add_obj {
     position: absolute;
-    bottom: 1px;
-    left: 12px;
+    bottom: 0px;
+    left: 14px;
     background-image: url('../images/add.png');
-    height: 12px;
-    width: 12px;
+    height: 14px;
+    width: 14px;
     background-size: 8px;
     background-color: #FFF;
     background-position: center;
@@ -195,6 +196,7 @@
     vertical-align: middle;
     padding: 2px;
     font-size: 11px;
+    background: #fff;
 }
 .objval[contenteditable]{
     display: inline-block;
