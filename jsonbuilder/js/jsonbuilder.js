@@ -144,6 +144,10 @@ json_object.ext({
 		}else if(key && this.key){
 
 		}
+	},
+	add_sibling : function(){
+		//console.log(this);
+		this.add();
 	}
 });
 
@@ -159,15 +163,19 @@ function json_view(json_object){
 
 	if(is_object || is_array){	
 		if(is_object){
-			html += "<div class='key_holder'>" +
-						"<div class='key_row'>" +
+			if(json_object.parent.child.length == 0){
+				html += "<div class='key_holder'>";
+			}
+			html += 	"<div class='key_row'>" +
 							"<div class='key'>" +
 								"<span class='objtxt' contenteditable></span>" +
 							"</div>" +
 							"<div class='val'>";
 		}else if(is_array){	
-			html += "<div class='key_holder'>" +
-						"<div class='key_row'>" +
+			if(json_object.parent.child.length == 0){
+				html += "<div class='key_holder'>";
+			}
+			html += 	"<div class='key_row'>" +
 							"<div class='val'>";
 		}
 	}
@@ -184,11 +192,15 @@ function json_view(json_object){
 	if(is_object || is_array){
 		if(is_object){
 			html +=			"</div>" +
-						"</div>" +
-					"</div>";
+						"</div>";
+			if(json_object.parent.child.length == 0){
+				html += "</div>";
+			}
 		}else if(is_array){	
-			html +=	"</div>" +
-				"</div>";
+			html +=	"</div>";
+			if(json_object.parent.child.length == 0){
+				html += "</div>";
+			}
 		}
 	}
 
@@ -217,9 +229,14 @@ function json_view(json_object){
 	}else{
 		if(json_object.parent.child.length == 1){ //$(_this.html,'&h{key_holder}')
 			if(is_object || is_array){
+				var add_sibling = "<div class='add_obj'></div>";
+				add_sibling = $('<->',add_sibling)._('+={click}',function(e){
+					_this.add_sibling.bind(this)(e, _this);
+				})[0];
 				$(json_object.parent_el,'?{.json_init}.>|{0}.x',[_this.html]);
-				$(_this.html,'>|{0}',["<div class='add_obj'></div>"]);
+				$(_this.html,'>|{0}',[add_sibling]);
 				_this.html = $(_this.html,'?{.key_row}')[0];
+
 			}else if(is_number || is_string){
 				$(json_object.parent_el,'?{.json_init}.>|{0}.x',[_this.html]);
 			}
@@ -324,5 +341,8 @@ json_view.ext({
 		if(val){
 			_this.json_object.setVal(val);
 		}
+	},
+	add_sibling : function(e, _this){
+		_this.json_object.add_sibling();
 	}
 });
