@@ -6,7 +6,6 @@
 		key = key
 		val = value
 		name,
-		updateObject
 		parent_el
 	}
 */
@@ -82,8 +81,6 @@ json_object.ext({
 				name : this.name + '.' + key
 			});
 		}else if(this.type == "String"){
-			//this.JSON.string = key;
-			//this.setVal();
 			this.val = new this.constructor({
 				type : val,
 				parent : this,
@@ -93,7 +90,6 @@ json_object.ext({
 				name : this.name + '.' + key
 			});
 		}else if(this.type == "Number"){
-			//this.JSON.number = key;
 			this.val = new this.constructor({
 				type : val,
 				parent : this,
@@ -327,7 +323,6 @@ json_view.ext({
 
 		_this.json_object.add();
 
-		//console.log(_this.json_object);
 		e.stopPropagation();
 	},
 	open_option : function(e, _this){
