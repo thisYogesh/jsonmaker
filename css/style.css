@@ -104,8 +104,10 @@
     border-radius: 2px;
     vertical-align: middle;
     padding: 2px;
-    font-size: 11px;
+    font-size: 12px;
     background: #fff;
+	color:#881391;
+	/*text-shadow: 0 0 0px #000;*/
 }
 .objtxt[contenteditable]{
     display: inline-block;
@@ -195,8 +197,10 @@
     border-radius: 2px;
     vertical-align: middle;
     padding: 2px;
-    font-size: 11px;
+    font-size: 12px;
     background: #fff;
+	color:#C41A16;
+	/*text-shadow: 0 0 0px #000;*/
 }
 .objval[contenteditable]{
     display: inline-block;
