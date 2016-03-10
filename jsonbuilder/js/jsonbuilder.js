@@ -200,7 +200,7 @@ function json_view(json_object){
 	}
 
 	if(is_object || is_array || !json_object.parent){
-		_this.html = $('<->',html)._('?{.json_init}.+={click,0}.?{.op}.+={click,1}....',[
+		_this.html = $('<->',html)._('?{.json_init}.#{op=close}.+={click,0}.?{.op}.+={click,1}....',[
 			function(e){
 				_this.open_option.bind(this)(e, _this);
 			}, function(e){
@@ -297,6 +297,7 @@ json_view.ext({
 		return html;
 	},
 	option_controller : function(e, _this){
+		console.log($(this,'#{op}'));
 		var el = $(this);
 		if(el._("&h{_Object}")){
 			_this.json_object.setType({});
@@ -326,7 +327,12 @@ json_view.ext({
 		e.stopPropagation();
 	},
 	open_option : function(e, _this){
-		$(this,'?{.json_op}.&+{show}');
+		var el = $(this);
+		if(el._('#{op}') == "close"){
+			el._('#{op=open}.?{.json_op}.&+{show}');
+		}else{
+			el._('#{op=close}.?{.json_op}.&x{show}');
+		}
 	},
 	setKey : function(e, _this){
 		var key = $(this,',');
