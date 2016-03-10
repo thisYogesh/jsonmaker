@@ -593,7 +593,7 @@
             });
             if(args.val){
                 this.dataget(e, args.val)
-                this.setReturn(e, aregs.val);
+                this.setReturn(e, args.val);
             }
         },
         dataget : function(e, args){ // get dataset properties
