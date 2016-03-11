@@ -164,6 +164,7 @@ function json_view(json_object){
 			html += "<div class='key_holder'>";
 
 			html +=		"<div class='key_row'>" +
+							"<div class='remove'></div>" +
 							"<div class='key'>" +
 								"<span class='objtxt' contenteditable></span>" +
 							"</div>" +
@@ -173,6 +174,7 @@ function json_view(json_object){
 			html += "<div class='key_holder'>";
 
 			html +=		"<div class='key_row'>" +
+							"<div class='remove'></div>" +
 							"<div class='val nonobj'>";
 		}
 	}
@@ -183,7 +185,11 @@ function json_view(json_object){
 		html += 					_this.json_init(json_object);
 		html += 				"</div>";
 	}else if(is_number || is_string){
-		html += 				"<span class='objval' contenteditable></span>";
+		if(is_number){
+			html += 			"<span class='objval num' contenteditable></span>";
+		}else if(is_string){
+			html += 			"<span class='objval str' contenteditable></span>";
+		}
 	}
 
 	if(is_object || is_array){
@@ -297,7 +303,6 @@ json_view.ext({
 		return html;
 	},
 	option_controller : function(e, _this){
-		console.log($(this,'#{op}'));
 		var el = $(this);
 		if(el._("&h{_Object}")){
 			_this.json_object.setType({});
