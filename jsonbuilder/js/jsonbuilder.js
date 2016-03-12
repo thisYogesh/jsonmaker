@@ -234,15 +234,25 @@ function json_view(json_object){
 			}
 		])[0];
 	}else if(is_number || is_string){
-		_this.html = $('<->',html)._('+={blur}',function(e){
-			_this.setVal.bind(this)(e, _this);
-		})[0];
+		_this.html = $('<->',html)._('+={blur,0}.+={keypress,1}',[
+			function(e){
+				_this.setVal.bind(this)(e, _this);
+			},
+			function(e){
+				if(e.keyCode == 13)e.preventDefault();
+			}
+		])[0];
 	}
 
 	if(is_object){
-		$(_this.html, '?{.objtxt}.+={blur}', function(e){
-			_this.setKey.bind(this)(e, _this);
-		});
+		$(_this.html, '?{.objtxt}.+={blur,0}.+={keypress,1}', [
+			function(e){
+				_this.setKey.bind(this)(e, _this);
+			},
+			function(e){
+				if(e.keyCode == 13)e.preventDefault();
+			}
+		]);
 	}
 	/* append to the parent */
 	if(!json_object.parent && !json_object.view){ // superParent

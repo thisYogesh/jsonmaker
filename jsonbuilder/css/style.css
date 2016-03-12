@@ -5,6 +5,15 @@
     font-weight: 400;
     src : url("../fonts/Consolas.ttf") format("truetype");
 }
+html {
+    position: relative;
+}
+body {
+    padding-bottom: 30px;
+}
+html,body{
+    min-height:100%;
+}
 *{
 	margin: 0;
 	padding: 0;
@@ -20,6 +29,10 @@
     font-family: 'console','Inconsolata',"Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 400;
     outline: none;
+}
+.container {
+    width: 600px;
+    margin: 0 auto;
 }
 .show{
     display: block!important;
@@ -52,9 +65,18 @@
 .json_op >i {
     padding: 0px 2px;font-style: normal;border-right: 1px solid;display: inline-block;
 }
+
+._block{
+    padding: 15px;
+    margin: 15px 0;
+    border: 1px solid #ddd;
+    background: #eee;
+    border-radius: 2px;
+}
+
 .json_editor {
     padding: 15px;
-    margin: 15px;
+    margin: 15px 0;
     border: 1px solid #ddd;
     background: #eee;
     border-radius: 2px;
@@ -247,4 +269,54 @@
 }
 .add_obj:hover,.remove:hover{
     opacity:1;
+}
+.foot {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer {
+    padding: 6px;
+    background: #EEEEEE;
+    border: 1px solid#ddd;
+    border-radius: 2px 2px 0 0;
+}
+
+.auth_info {
+    color: #4F4F4F;
+    font-size: 12px;
+}
+
+.aname {
+    color: black;
+}
+.tl {
+    font-size: 14px;
+}
+
+pre.result {
+    background: #fff;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    margin-top: 6px;
+}
+#jsonEditor {
+    position: relative;
+}
+
+.stringify {
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    border: 1px solid #B7B7B7;
+    border-width: 0 0 1px 1px;
+    border-radius: 0 0 0 12px;
+    padding: 5px;
+    font-size: 12px;
+    background-color: #fff;
+    cursor: pointer;
+    z-index: 1;
+    box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.09);
 }
