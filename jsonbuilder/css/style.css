@@ -113,6 +113,8 @@
     font-size: 12px;
     background: #fff;
 	color:#881391;
+    line-height: 14px;
+    height: 20px;
 	/*text-shadow: 0 0 0px #000;*/
 }
 .objtxt[contenteditable]{
@@ -206,6 +208,8 @@
     font-size: 12px;
     background: #fff;
 	color:#C41A16;
+    line-height: 14px;
+    height: 20px;
 	/*text-shadow: 0 0 0px #000;*/
 }
 .objval.str:before,.objval.str:after{
