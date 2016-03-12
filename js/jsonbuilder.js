@@ -1,14 +1,4 @@
 //
-/*
-	op = {
-		type = "object", "Array"
-		parent = parent Object
-		key = key
-		val = value
-		name,
-		parent_el
-	}
-*/
 function json_object(op){
 	op = op || {};
 	this.key = op.key;
@@ -142,19 +132,40 @@ json_object.ext({
 		}
 	},
 	add_sibling : function(){
-		//console.log(this);
-		this.parent.add();
+		if(this.parent){
+			this.parent.add();
+		}else{
+			console.log("you can't add sibling to superParent!");
+		}
+	},
+	remove : function(){
+		if(this.parent){
+			for(var i=0; i<this.parent.child.length; i++){
+				if(this.parent.child[i] == this){
+					this.parent.child.splice(i,1);
+				}
+			}
+			if(this.parent.child.length == 0){
+				this.parent.reset();
+			}
+		}
+	},
+	reset : function(){
+		this.child = [];
+		this.type = null;
+		this.val = null;
+		this.view.reset();
 	}
 });
 
 function json_view(json_object){
 	var _this = this,
 	html = "",
-	is_object = json_object.parent && json_object.parent.type == "Object",
-	is_array = json_object.parent && json_object.parent.type == "Array",
-	is_string = json_object.parent && json_object.parent.type == "String",
-	is_number = json_object.parent && json_object.parent.type == "Number",
-	is_firstChild = json_object.parent && json_object.parent.child.length == 1;
+	is_object = !json_object.view && json_object.parent && json_object.parent.type == "Object",
+	is_array = !json_object.view && json_object.parent && json_object.parent.type == "Array",
+	is_string = !json_object.view && json_object.parent && json_object.parent.type == "String",
+	is_number = !json_object.view && json_object.parent && json_object.parent.type == "Number",
+	is_firstChild = !json_object.view && json_object.parent && json_object.parent.child.length == 1;
 
 	_this.json_object = json_object;
 
@@ -180,7 +191,7 @@ function json_view(json_object){
 	}
 	
 	// only if json_object is of type [Array] or [Object] then json_block going to create
-	if(is_object || is_array || !json_object.parent){ 
+	if(is_object || is_array || !json_object.parent || json_object.view){ 
 		html += 				"<div class='json_block'>";
 		html += 					_this.json_init(json_object);
 		html += 				"</div>";
@@ -205,8 +216,17 @@ function json_view(json_object){
 		}
 	}
 
-	if(is_object || is_array || !json_object.parent){
-		_this.html = $('<->',html)._('?{.json_init}.#{op=close}.+={click,0}.?{.op}.+={click,1}....',[
+	if(is_object || is_array || !json_object.parent || json_object.view){
+		var selector;
+		if(!json_object.parent || json_object.view){
+			selector = '?{.json_init}.#{op=close}.+={click,1}.?{.op}.+={click,2}....';
+		}else{
+			selector = '?{.remove}.+={click,0}.^.?{.json_init}.#{op=close}.+={click,1}.?{.op}.+={click,2}........';
+		}
+		_this.html = $('<->',html)._(selector, [
+			function(e){
+				_this.remove.bind(this)(e, _this);
+			},
 			function(e){
 				_this.open_option.bind(this)(e, _this);
 			}, function(e){
@@ -224,29 +244,27 @@ function json_view(json_object){
 			_this.setKey.bind(this)(e, _this);
 		});
 	}
-
-	if(!json_object.parent){ // superParent
+	/* append to the parent */
+	if(!json_object.parent && !json_object.view){ // superParent
 		$(json_object.parent_el,'>+{0}',[_this.html]);
-	}else{
-		if(is_firstChild){
-			if(is_object || is_array){
-				var add_sibling = "<div class='add_obj'></div>";
-				add_sibling = $('<->',add_sibling)._('+={click}',function(e){
-					_this.add_sibling.bind(this)(e, _this);
-				})[0];
-				$(json_object.parent_el,'?{.json_init}.>|{0}.x',[_this.html]);
-				$(_this.html,'>|{0}',[add_sibling]);
-				_this.html = $(_this.html,'?{.key_row}')[0];
+	}else if(is_firstChild){
+		if(is_object || is_array){
+			var add_sibling = "<div class='add_obj'></div>";
+			add_sibling = $('<->',add_sibling)._('+={click}',function(e){
+				_this.add_sibling.bind(this)(e, _this);
+			})[0];
+			$(json_object.parent_el,'?{.json_init}.>|{0}.x',[_this.html]);
+			$(_this.html,'>|{0}',[add_sibling]);
+			_this.html = $(_this.html,'?{.key_row}')[0];
 
-			}else if(is_number || is_string){
-				$(json_object.parent_el,'?{.json_init}.>|{0}.x',[_this.html]);
-			}
+		}else if(is_number || is_string){
+			$(json_object.parent_el,'?{.json_init}.>|{0}.x',[_this.html]);
+		}
+	}else if(!json_object.view){ // if view is not present
+		if(!json_object.parent.parent){
+			$(json_object.parent_el,'?{>.key_holder}.>+{0}',[_this.html]);
 		}else{
-			if(!json_object.parent.parent){
-				$(json_object.parent_el,'?{>.key_holder}.>+{0}',[_this.html]);
-			}else{
-				$(json_object.parent_el,'?{>.val >.json_block >.key_holder}.>+{0}',[_this.html]);
-			}
+			$(json_object.parent_el,'?{>.val >.json_block >.key_holder}.>+{0}',[_this.html]);
 		}
 	}
 	return _this;
@@ -353,5 +371,18 @@ json_view.ext({
 	},
 	add_sibling : function(e, _this){
 		_this.json_object.add_sibling();
+	},
+	remove: function(e, _this){
+		$(_this.json_object.view.html ,'x'); // removed the element from DOM
+		_this.json_object.remove();
+	},
+	reset: function(){
+		var resetView = new this.constructor(this.json_object);
+		if(this.json_object.parent){
+			$(this.html, '?{>.val}.&x{obj}.&+{nonobj}.?{>.json_block}.>|{0}.x', [resetView.html]);
+		}else{
+			$(this.html, '>|{0}.x', [resetView.html]);
+			this.html = resetView.html;
+		}
 	}
 });
