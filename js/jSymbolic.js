@@ -471,16 +471,20 @@
         createEle : function(htmlStr){
             var el = this.strToHtml(htmlStr);
             if(el.length > 0){
-                this.setCtx(el)
+                this.setCtx(el);
             }
         },
         el : function(e, prop, op){ // el function is used to retrive other than attributes and style properties
             prop = this.formateArg(prop, op);
             if(prop.val){
                 this.forEach(prop.val, function(a,b,c,d){
-                    c[b] = e[b];  //e[b] : putting value in.
+                    c[b] = e[b];  //getting value from e[b] and putting in c[b].
                 });
                 this.setReturn(e, prop.val);
+            }else if(prop){
+                this.forEach(prop, function(a,b,c,d){
+                    e[b] = eval(c[b]);
+                });
             }
         },
         $ : function(e, fun){

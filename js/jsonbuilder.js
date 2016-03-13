@@ -122,13 +122,10 @@ json_object.ext({
 		}
 	},
 	setKey : function(key){
-		if(key && !this.key){
+		if(key){
 			this.key = key;
 			this.name += this.key;
 			this.superParent[this.name] = this;
-			this.parent.JSON[key] = this.JSON;
-		}else if(key && this.key){
-
 		}
 	},
 	add_sibling : function(){
@@ -155,6 +152,55 @@ json_object.ext({
 		this.type = null;
 		this.val = null;
 		this.view.reset();
+	},
+	stringify: function(){
+		var stringify;
+		if(this.child.length > 0){
+			for(var i=0; i<this.child.length; i++){
+				if(this.type == "Object"){
+					if(!this.parent){
+						if(stringify == undefined){
+							stringify = {main:{}};
+							stringify.main[this.child[i].key] = this.child[i].stringify();
+						}else{
+							stringify.main[this.child[i].key] = this.child[i].stringify();
+						}
+					}else if(this.parent){
+						if(stringify == undefined){
+							stringify = {};
+							stringify[this.child[i].key] = {};
+							stringify[this.child[i].key] = this.child[i].stringify();
+						}else{
+							stringify[this.child[i].key] = {};
+							stringify[this.child[i].key] = this.child[i].stringify();
+						}
+						//stringify[this.key] = this.child[i].stringify();
+					}
+				}else if(this.type == "Array"){
+					if(!this.parent){
+						if(stringify == undefined){	
+							stringify = {main:[]};
+							stringify.main.push(this.child[i].stringify());
+						}else{
+							stringify.main.push(this.child[i].stringify());
+						}
+					}else if(this.parent){
+						if(stringify == undefined){
+							stringify = {}
+							stringify = [];
+							stringify.push(this.child[i].stringify());
+						}else{
+							stringify.push(this.child[i].stringify());
+						}
+					}
+				}else if(this.type == "String"){
+					stringify = this.val.val;
+				}else if(this.type == "Number"){
+					stringify = Number(this.val.val);
+				}
+			}
+		}
+		return stringify;
 	}
 });
 
