@@ -202,7 +202,7 @@ html,body{
 }
 .add_obj {
     position: absolute;
-    bottom: 0px;
+    bottom: 1px;
     left: 14px;
     background-image: url('../images/add.png');
     height: 14px;
@@ -265,10 +265,13 @@ html,body{
 }
 
 .add_obj,.remove{
-    opacity:.4;
+    opacity:0;
+}
+.json_editor:hover .add_obj,.json_editor:hover .remove{
+    opacity:0.4;
 }
 .add_obj:hover,.remove:hover{
-    opacity:1;
+    opacity:1!important;
 }
 .foot {
     position: absolute;
@@ -319,4 +322,16 @@ pre.result {
     cursor: pointer;
     z-index: 1;
     box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.09);
+}
+.main-title {
+    margin-top: 12px;
+}
+.auth_info:after,.auth_info:before {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.em {
+    float: right;
 }
