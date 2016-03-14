@@ -306,9 +306,14 @@ function json_view(json_object){
 	}else if(is_firstChild){
 		if(is_object || is_array){
 			var add_sibling = "<div class='add_obj'></div>";
-			add_sibling = $('<->',add_sibling)._('+={click}',function(e){
-				_this.add_sibling.bind(this)(e, _this);
-			})[0];
+			add_sibling = $('<->',add_sibling)._('+={click,0}.+={mouseenter,1}.+={mouseleave,1}',[
+				function(e){
+					_this.add_sibling.bind(this)(e, _this);
+				},
+				function(e){
+					_this.highLight.bind(this)(e, _this);
+				}
+			])[0];
 			$(json_object.parent_el,'?{.json_init}.>|{0}.x',[_this.html]);
 			$(_this.html,'>|{0}',[add_sibling]);
 			_this.html = $(_this.html,'?{.key_row}')[0];
@@ -439,6 +444,13 @@ json_view.ext({
 		}else{
 			$(this.html, '>|{0}.x', [resetView.html]);
 			this.html = resetView.html;
+		}
+	},
+	highLight: function(e, _this){
+		if(e.type == "mouseenter"){
+			$(_this.json_object.view.html,'^.&+{to_add}');
+		}else{
+			$(_this.json_object.view.html,'^.&x{to_add}');
 		}
 	}
 });
