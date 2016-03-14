@@ -1,4 +1,4 @@
-//
+// Author : Yogesh Jagdale
 function json_object(op){
 	op = op || {};
 	this.key = op.key;
