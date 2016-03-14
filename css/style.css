@@ -103,7 +103,10 @@ html,body{
     content: "]";
 }
 .key_holder {
-    padding-left: 15px;
+    padding: 0 0 0 18px;
+}
+.key_holder.to_add {
+    background-color:#F7F7F7;
 }
 .key_row {
     margin: 6px 0;
@@ -150,9 +153,11 @@ html,body{
 
 .val.obj >.iobj:after {
     content: "},";
+    letter-spacing: -2px;
 }
 .val.obj >.iarr:after {
     content: "],";
+    letter-spacing: -2px;
 }
 
 .json_block >.key_holder > .key_row:last-child > .obj > .iobj:after {
@@ -202,17 +207,14 @@ html,body{
 }
 .add_obj {
     position: absolute;
-    bottom: 1px;
+    bottom: 2px;
     left: 14px;
-    background-image: url('../images/add.png');
-    height: 14px;
-    width: 14px;
-    background-size: 8px;
-    background-color: #FFF;
+    background-image: url('../images/add1.png');
+    height: 12px;
+    width: 12px;
+    background-size: 100%;
     background-position: center;
-    border: 1px solid #ddd;
     background-repeat: no-repeat;
-    border-radius: 50%;
     cursor: pointer;
 }
 .objtxt:active,.objtxt:focus {
@@ -251,17 +253,16 @@ html,body{
 .val.nonobj > .json_block{display: inline;}
 .remove {
     position: absolute;
-    background: url('../images/remove.png');
-    padding: 6px;
-    background-size: 50%;
+    background: url('../images/remove1.png');
+    width: 12px;
+    height: 12px;
+    background-size: 100%;
     z-index: 2;
-    left: -14px;
-    top: 4px;
+    left: -15px;
+    top: 5px;
     background-repeat: no-repeat;
     background-position: center;
     border-radius: 50%;
-    background-color: #fff;
-    border: 1px solid #ddd;
 }
 
 .add_obj,.remove{
