@@ -326,11 +326,11 @@
         },
         childs: function (e) {
             e = e.children;
-            if (!this.IFC) e ? this.setCtx(e) : e; else return e;
+            if (!this.IFC) this.setCtx(e); else return e;
         },
         find: function (e, sel) {
             e = jSymbolic.selectorBuilder(e, sel);
-            if (!this.IFC) e.length > 0 || e.nodeType ? this.setCtx(e) : e; else return e;
+            if (!this.IFC) this.setCtx(e); else return e;
         },
 		indx: function(el, indx){
 			indx = Number(indx);
