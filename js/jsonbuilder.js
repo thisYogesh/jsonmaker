@@ -218,7 +218,7 @@ function json_view(json_object){
 	if(is_object || is_array){	
 		if(is_object){
 			if(is_firstChild)
-			html += "<div class='key_holder'>";
+			html += "<div class='key_holder'><div class='line'></div>";
 
 			html +=		"<div class='key_row'>" +
 							"<div class='remove'></div>" +
@@ -228,7 +228,7 @@ function json_view(json_object){
 							"<div class='val nonobj'>";
 		}else if(is_array){
 			if(is_firstChild)
-			html += "<div class='key_holder'>";
+			html += "<div class='key_holder'><div class='line'></div>";
 
 			html +=		"<div class='key_row'>" +
 							"<div class='remove'></div>" +
@@ -328,6 +328,18 @@ function json_view(json_object){
 			$(json_object.parent_el,'?{>.val >.json_block >.key_holder}.>+{0}',[_this.html]);
 		}
 	}
+	// if key is found then make it auto focuable
+	/*var keyEl = $(_this.html,'?{.objtxt}');
+	if(keyEl.length == 1){
+		keyEl = keyEl[0];
+		var selection = window.getSelection(),
+		range = document.createRange();
+
+		keyEl.innerHTML = "&nbsp;";
+		keyEl = keyEl.childNodes[0];
+		range.selectNodeContents(keyEl);
+		selection.addRange(range);
+	}*/
 	return _this;
 }
 
@@ -359,25 +371,25 @@ json_view.ext({
 		return html;
 	},
 	json_init : function(json_object){
-		var html = "<div class='json_init'>" +
+		var html = "<button class='json_init'>" +
 			  			"JSON" +
 			  			"<div class='json_op'>";
 		html += 			this.option(json_object);
 		html +=			"</div>" +
-			  		"</div>";
+			  		"</button>";
 		return html;
 	},
 	option : function(json_object){
-		var _Object = "<span class='op _Object'>{} Object</span>",
-			_Array 	= "<span class='op _Array'>[] Array</span>",
-			_String	= "<span class='op _String'>\"\" String</span>",
-			_Number	= "<span class='op _Number'>0 Number</span>",
+		var _Object = "<input type='button' value='{} Object' class='op _Object'/>",
+			_Array 	= "<input type='button' value='[] Array' class='op _Array'/>",
+			_String	= "<input type='button' value='\"\" String' class='op _String'/>",
+			_Number	= "<input type='button' value='0 Number' class='op _Number'/>",
 			html 	= "";
 
 		if(!json_object.parent){
 			html += _Object + _Array;
 		}else{
-			html += _Object + _Array + _Number + _String;
+			html += _String + _Number + _Object + _Array;
 		}
 		return html;
 	},
