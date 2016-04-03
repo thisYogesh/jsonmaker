@@ -5,6 +5,11 @@
 	<title>jsonmaker.com - Create your JSON easily with {json:maker}</title>
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<link rel="icon" href="images/fav.png">
+	<meta property="og:url"           content="http://www.jsonmaker.com/index.html" />
+	<meta property="og:type"          content="website" />
+	<meta property="og:title"         content="JsonMaker" />
+	<meta property="og:description"   content="Create your JSON easily with {json:maker}" />
+	<meta property="og:image"         content="http://www.jsonmaker.com/images/fb_logo.png" />
 	<script type="text/javascript" src="js/jSymbolic.js"></script>
 	<script type="text/javascript" src="js/jsonbuilder.js"></script>
 	<script type="text/javascript" src="js/app.js"></script>
@@ -18,18 +23,69 @@
 	  	ga('create', 'UA-75073079-1', 'auto');
 	  	ga('send', 'pageview');
 	</script-->
+	<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '908808245902696',
+      xfbml      : true,
+      version    : 'v2.5'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
 </head>
 <body>
-	<h1 align="center" class="main-title">
-		{JSON : Maker}
-	</h1>
+	<div id="fb-root"></div>
+	<script>
+	(function(d, s, id) {
+	  var js, fjs = d.getElementsByTagName(s)[0];
+	  if (d.getElementById(id)) return;
+	  js = d.createElement(s); js.id = id;
+	  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=908808245902696";
+	  fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));
+	</script>
+	<div class="container top-header">
+  		<h1 class="main-title">
+  			<a class="logo"></a>
+  			<span class="lgsl">{JSON : Maker}</span>
+		</h1>
+	</div>
+	<div class="container" style="">
+		<p class="info">
+			JSON (JavaScript Object Notation) is a lightweight data-interchange format.
+			It is easy for humans to read and write. It is easy for machines to parse and generate.
+			It is based on a subset of the JavaScript Programming Language, Standard ECMA-262 3rd Edition - December 1999.
+			<br><br>
+			JSON is a text format that is completely language independent but uses conventions that are 
+			familiar to programmers of the C-family of languages,
+			including C, C++, C#, Java, JavaScript, Perl, Python, and many others.
+			These properties make JSON an ideal data-interchange language.
+			<span class="ref">Referred from : http://www.json.org</span>
+		</p>
+	</div>
 	<section class="container">
 		<div id="jsonEditor"></div>
 		<button class="cmd stringify">Stringify this</button>
-		<button class="cmd log">Log to your console</button>
+		<button class="cmd log">> Log to your console</button>
 		<div class="_block">
 			<span class="tl">JSON Stringify</span>
-			<pre class="result hide"></pre>
+			<textarea class="result hide" readOnly></textarea>
+		</div>
+		<div class="fb_like">
+			<div class="fb-like" 
+				data-href="http://www.jsonmaker.com" 
+				data-layout="box_count" 
+				data-action="like" 
+				data-show-faces="true" 
+				data-share="true"></div>
 		</div>
 	</section>
 	<section class="foot">
