@@ -166,9 +166,9 @@
         cleanObject : function(obj){
             var a= [],cf = false;
             for(var i=0; i<obj.length; i++){
-                if(obj[i].length){
+                if(obj[i] instanceof Array){
                     for(var c=0; c<obj[i].length; c++){
-                        if(obj[i][c].length){
+                        if(obj[i][c] instanceof Array){
                             cf = true;
                             a.push(this.cleanObject(obj[i][c]));
                         }else{
@@ -483,7 +483,8 @@
                 this.setReturn(e, prop.val);
             }else if(prop){
                 this.forEach(prop, function(a,b,c,d){
-                    e[b] = eval(c[b]);
+                    var v = eval(c[b]);
+                    e[b] = v ? v : c[b];
                 });
             }
         },

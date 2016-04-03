@@ -5,7 +5,8 @@ $(document ,":)", function(){
 	$(".stringify","+={click}",function(){
 		var json = makeStringify();
 		if(json){
-			$(".result","&x{hide}.e{innerHTML=''}.>+{0}",[json]);
+			var rows = json.split(String.fromCharCode(10)).length;
+			$(".result","&x{hide}.e{innerHTML=}.>+{0}.@{1}",[json,{rows:rows}]);
 		}
 	});
 
