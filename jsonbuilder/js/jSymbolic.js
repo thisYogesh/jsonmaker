@@ -19,6 +19,7 @@
         push : Array.prototype.push,
         splice : Array.prototype.splice
     };
+    var qTxt = /^("|')((\w|\W|\@|\.|\#)+)?("|')$/;
     var jsEvent = []; // this variable used for jSymbolic event handeling tracking
     var bool = {"true": true, "false": false};
     var udf = 0; // this variable used for jSymbolic user defined function
@@ -483,8 +484,8 @@
                 this.setReturn(e, prop.val);
             }else if(prop){
                 this.forEach(prop, function(a,b,c,d){
-                    var v = eval(c[b]);
-                    e[b] = v ? v : c[b];
+                    var v = qTxt.test(c[b]) ? eval(c[b]) : c[b];
+                    e[b] = v;
                 });
             }
         },

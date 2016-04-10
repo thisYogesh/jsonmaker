@@ -236,6 +236,31 @@ json_object.ext({
 			}
 		}
 		return stringify;
+	},
+	makeJSON : function(Obj){
+		this.reset();
+		var type = this.getType({type:Obj});
+		if(type == "Object"){
+			this.setType({});
+			this.view.setTypeInView();
+			for(var key in Obj){
+				this.add();
+				this.val.view.setKey(null, null, key);
+				this.val.makeJSON(Obj[key]);
+			}
+		}else if(type == "Array"){
+			this.setType([]);
+			this.view.setTypeInView();
+			for(var i=0;i<Obj.length; i++){
+				this.add();
+				this.val.makeJSON(Obj[i]);
+			}
+		}else{
+			this.setType(type == "String" ? "" : 0);
+			this.view.setTypeInView();
+			this.add();
+			this.val.view.setVal(null, null, Obj);
+		}
 	}
 });
 
@@ -419,30 +444,39 @@ json_view.ext({
 		var el = $(this);
 		if(el._("&h{_Object}")){
 			_this.json_object.setType({});
-			if( $(_this.html, '&h{json_block}') ){
-				$(_this.html,'&x{iarr}.&+{iobj}');
-			}else{
-				$(_this.html,'?{.json_block}.&x{iarr}.&+{iobj}');
-			}
+			_this.setTypeInView();
 		}else if(el._("&h{_Array}")){
 			_this.json_object.setType([]);
-			if( $(_this.html, '&h{json_block}') ){
-				$(_this.html,'&x{iobj}.&+{iarr}');
-			}else{
-				$(_this.html,'?{.json_block}.&x{iobj}.&+{iarr}');
-			}
+			_this.setTypeInView();
 		}else if(el._("&h{_String}")){
 			_this.json_object.setType({val : ""});
-			$(_this.html,'&x{iarr iobj}');
+			_this.setTypeInView();
 		}else if(el._("&h{_Number}") > -1){
 			_this.json_object.setType({val : 0});
-			$(_this.html,'&x{iarr iobj}');
+			_this.setTypeInView();
 		}
 		el._('^.&x{show}');
-
 		_this.json_object.add();
-
 		e.stopPropagation();
+	},
+	setTypeInView : function(){
+		if(this.json_object.type == "Object"){
+			if( $(this.html, '&h{json_block}') ){
+				$(this.html,'&x{iarr}.&+{iobj}');
+			}else{
+				$(this.html,'?{.json_block}.&x{iarr}.&+{iobj}');
+			}
+		}else if(this.json_object.type == "Array"){
+			if( $(this.html, '&h{json_block}') ){
+				$(this.html,'&x{iobj}.&+{iarr}');
+			}else{
+				$(this.html,'?{.json_block}.&x{iobj}.&+{iarr}');
+			}
+		}else if(this.json_object.type == "Object"){
+			$(this.html,'&x{iarr iobj}');
+		}else if(this.json_object.type == "Number"){
+			$(this.html,'&x{iarr iobj}');
+		}
 	},
 	open_option : function(e, _this){
 		var el = $(this);
@@ -452,16 +486,26 @@ json_view.ext({
 			el._('#{op=close}.?{.json_op}.&x{show}');
 		}
 	},
-	setKey : function(e, _this){
-		var key = $(this,',');
-		if(key){
-			_this.json_object.setKey(key)
+	setKey : function(e, _this, key){
+		if(!key){ // called by blur event
+			key = $(this,',');
+			if(key){
+				_this.json_object.setKey(key);
+			}
+		}else if(key){ // called by programatic
+			$(this.html, '?{.objtxt}.>+{0}', [key]);
+			this.json_object.setKey(key);
 		}
 	},
-	setVal : function(e, _this){
-		var val = $(this,',');
-		if(val){
-			_this.json_object.setVal(val);
+	setVal : function(e, _this, val){
+		if(!val){
+			var val = $(this,',');
+			if(val){
+				_this.json_object.setVal(val);
+			}
+		}else if(val){
+			$(this.html, '>+{0}', [val]);
+			this.json_object.setVal(val);
 		}
 	},
 	add_sibling : function(e, _this){
