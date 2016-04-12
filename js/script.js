@@ -24,10 +24,33 @@ $(document ,":)", function(){
 	$(".stringify","+={click}",function(){
 		var json = makeStringify();
 		if(json){
-			var rows = json.split(String.fromCharCode(10)).length;
+			var rows = json.split(String.fromCharCode(10)).length,
+			top = $(".result_pad",'e{offsetTop}');
+
 			$(".result","&x{hide}.e{value=''}.e{0}.@{1}",[{value:json},{rows:rows}]);
+			$("html,body", "e{0}", [{scrollTop : top}]);
 		}
 	})[0].click();
+
+	$(".objectify","+={click}",function(){
+		try{
+			var json_str = $(".result","%"),
+			json_obj = JSON.parse(json_str),
+			top = $("#jsonEditor",'e{offsetTop}');
+
+			$(".parse_error","&+{hide}");
+			json.makeJSON(json_obj);
+
+			$("html,body", "e{0}", [{scrollTop : top}]);
+		}catch(e){
+			var msg = "Error : " + e.message,
+			top = $(".result_pad",'e{offsetTop}');
+
+			$(".parse_error","&x{hide}.e{textContent=''}.e{0}",[{textContent:msg}]);
+			$("html,body", "e{0}", [{scrollTop : top}]);
+		}
+
+	});
 
 	$(".log","+={click}", function(){
 		var json = makeStringify();
@@ -39,6 +62,11 @@ $(document ,":)", function(){
 				return true;
 			})();
 		}
+	});
+
+	$(".new-json","+={click}", function(){
+		json.reset();
+		$(".result","e{value=''}.@{rows=1}");
 	});
 
 	function makeStringify(){
