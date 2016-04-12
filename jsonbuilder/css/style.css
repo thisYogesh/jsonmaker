@@ -22,8 +22,8 @@ keyframes process{0%{background-position:0 0}100%{background-position:-34px 0}}
 .json_init:focus:before{content:"";border:1px solid #4D90FE;position:absolute;left:-1px;top:-1px;width:33px;height:17px;border-radius:2px}
 .json_op{position:absolute;white-space:nowrap;top:-4px;font-size:12px;left:100%;margin-left:6px;display:none;background:#fff;border:1px solid #ddd;border-radius:2px}
 .json_op >i{padding:0px 2px;font-style:normal;border-right:1px solid;display:inline-block}
-._block{padding:15px;margin:15px 0;border:1px solid #ddd;background:#eee;border-radius:2px}
-.json_editor{padding:15px;border:1px solid #ddd;background:#eee;border-radius:2px}
+._block{padding:15px;margin:8px 0 15px 0;border:1px solid #ddd;background:#eee;border-radius:2px}
+.json_editor{overflow:auto;max-height:600px;padding-left:8px}
 .json_op >i:last-child{border-right:0}
 .json_op >i:hover{background:#000;color:#fff}
 .json_block.iobj:before{content:"{"}
@@ -34,7 +34,7 @@ keyframes process{0%{background-position:0 0}100%{background-position:-34px 0}}
 .key_holder.to_add{background-color:#F7F7F7;border:1px dashed #CCCCCC;border-radius:2px}
 .key_holder.to_add .key_holder{border-color:#F7F7F7}
 .key_holder.to_add .key_holder .line:before,.key_holder.to_add .key_holder .line:after{background-color:#F7F7F7}
-.key_row{margin:6px 0;position:relative}
+.key_row{margin:6px 0;position:relative;white-space: nowrap;}
 .key{float:left;position:relative}
 .key:after{content:":"}
 .val:after{content:","}
@@ -60,7 +60,7 @@ keyframes process{0%{background-position:0 0}100%{background-position:-34px 0}}
 .add_obj{position:absolute;bottom:2px;left:14px;background-image:url('../images/add1.png');height:12px;width:12px;background-size:100%;background-position:center;background-repeat:no-repeat;cursor:pointer}
 .objtxt:active,.objtxt:focus{background:#fff;border:1px solid #4D90FE}
 .objval:active,.objval:focus{background:#fff;border:1px solid #4D90FE}
-.objval{border:1px solid #ddd;min-width:10px;border-radius:2px;vertical-align:middle;padding:0 2px;font-size:12px;background:#fff;color:#C41A16;line-height:18px;height:20px;vertical-align:top;/*text-shadow:0 0 0px #000;*/}
+.objval{border:1px solid #ddd;min-width:10px;border-radius:2px;vertical-align:middle;padding:0 2px;font-size:12px;background:#fff;color:#C41A16;line-height:18px;height:20px;vertical-align:top;white-space: nowrap;}
 .objval.str:before,.objval.str:after{content:"'"}
 .objval.num{color:#1C00CF}
 .objval.str{color:#C41A16}
@@ -76,7 +76,7 @@ keyframes process{0%{background-position:0 0}100%{background-position:-34px 0}}
 .aname{color:black}
 .tl{font-size:14px}
 pre.result{background:#fff;padding:8px;border:1px solid #ddd;border-radius:2px;margin-top:6px}
-#jsonEditor{position:relative;margin:15px 0 8px 0}
+#jsonEditor{position:relative;margin:15px 0 8px 0;padding:15px;border:1px solid #ddd;background:#eee;border-radius:2px}
 .main-title{position:relative}
 .auth_info:after,.auth_info:before{content:"";display:table;clear:both}
 .em{float:right}
@@ -96,3 +96,15 @@ pre.result{background:#fff;padding:8px;border:1px solid #ddd;border-radius:2px;m
 .info{color:#2A2A2A;font-size:15px}
 .info .ref{font-size:11px;font-style:italic}
 textarea.result{width:100%;padding:8px;border:1px solid #ddd;border-radius:2px;margin-top:8px;resize:none}
+.new-json {position: absolute;top: 0;right: 0;margin: 8px;z-index: 1;}
+.new-json:before {content: "\f006";font-family: FontAwesome;margin-right: 4px;}
+.cmd-wrap {display: inline-block;vertical-align: top;}
+.dir-ico {display: block;text-align: center;margin: 4px 0;color: #A3A3A3;}
+.parse_error {float: right;color: #FFFFFF;font-size: 14px;background: #b22;padding: 1px 4px;border-radius: 2px;}
+.parse_error:before {content: "\f071";font-family: FontAwesome;margin-right: 4px;}
+.tip{display: block;font-size: 12px;background: #808080;color: #fff;padding: 6px;border: 1px solid #616161;border-radius: 2px;margin-top: 6px}
+.tip > .t-point {display: inline-block;padding-left: 14px;margin: 3px 0;}
+.t-point:before {content: "\f05a";font-family: FontAwesome;margin-right: 4px;margin-left: -14px;}
+.t-point:first-child {margin-top: 0;}
+.t-point:last-child {margin-bottom: 0;}
+.cmd-btn{text-align:center}
