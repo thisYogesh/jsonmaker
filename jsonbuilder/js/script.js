@@ -69,6 +69,28 @@ $(document ,":)", function(){
 		$(".result","e{value=''}.@{rows=1}");
 	});
 
+	$(".result","+={keyup keydown}",function(e){
+		if(e.type == "keyup"){
+			if(e.keyCode == 13 || e.keyCode == 8){ // enter and backspace
+				var _this = $(this),
+				rows = _this._("%").split(String.fromCharCode(10)).length;
+				_this._("@{rows="+(rows)+"}");
+			}
+		}
+		/*else if(e.type == "keydown"){
+			if(e.keyCode == 9){ // tab
+				var _this = $(this),
+				el = _this[0],
+				cursorStartPoint = el.selectionStart,
+				val = _this._("%");
+
+				val = (val.substr(0, cursorStartPoint) + "   " + val.substr(cursorStartPoint));
+				_this._("e{value="+val+"}");
+				e.preventDefault();
+			}
+		}*/
+	});
+
 	function makeStringify(){
 		var json = "";
 		if(app.json.type){
