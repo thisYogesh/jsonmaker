@@ -1,3 +1,9 @@
+BG : #D4D7FE 
+BR : #9AA0E8
+
+JSON gradient : 
+-webkit-linear-gradient(59deg,#fff 25%,#D4D7FE 25%,#D4D7FE 50%,#fff 50%,#fff 75%,#D4D7FE 75%,#D4D7FE 100%,#fff 100%)
+
 <div class="json_editor">
 		<div class="json_init">
 			JSON
