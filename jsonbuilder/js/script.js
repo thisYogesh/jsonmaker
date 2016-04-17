@@ -4,17 +4,17 @@ $(document ,":)", function(){
 	var jObj = {
 		project:{
 			name : 'jsonmaker',
-			version : "1.1"
+			version : "1.2"
 		},
 		developer:{
 			name:{
-				firstName:'yogesh',
-				lastName:'jagdale'
+				firstName:'Yogesh',
+				lastName:'Jagdale'
 			},
 			age:24,
 			hobies:[
-				"reading",
-				"programming"
+				"Reading",
+				"Programming"
 			]
 		},
 		message:"Make your JSON while having your Coffee!"
@@ -37,30 +37,27 @@ $(document ,":)", function(){
 			var json_str = $(".result","%"),
 			json_obj = JSON.parse(json_str),
 			top = $("#jsonEditor",'e{offsetTop}');
-
 			$(".parse_error","&+{hide}");
 			json.makeJSON(json_obj);
-
-			$("html,body", "e{0}", [{scrollTop : top}]);
+			$("html,body", "e{0}", [{scrollTop : top - 10}]);
 		}catch(e){
 			var msg = "Error : " + e.message,
 			top = $(".result_pad",'e{offsetTop}');
-
 			$(".parse_error","&x{hide}.e{textContent=''}.e{0}",[{textContent:msg}]);
 			$("html,body", "e{0}", [{scrollTop : top}]);
 		}
-
 	});
 
 	$(".log","+={click}", function(){
 		var json = makeStringify();
 		if(json){
-			(function(){
+			if(console){
 				console.group("{JSON : Maker}");
 				console.log(json);
 				console.groupEnd();
-				return true;
-			})();
+			}else{
+				alert("Open your >_ console to see output!");
+			}
 		}
 	});
 
@@ -69,15 +66,19 @@ $(document ,":)", function(){
 		$(".result","e{value=''}.@{rows=1}");
 	});
 
-	$(".result","+={keyup keydown}",function(e){
-		if(e.type == "keyup"){
-			if(e.keyCode == 13 || e.keyCode == 8){ // enter and backspace
-				var _this = $(this),
-				rows = _this._("%").split(String.fromCharCode(10)).length;
-				_this._("@{rows="+(rows)+"}");
+	$(".result","+={keypress keydown keyup}",function(e){
+		if(e.type == "keypress"){
+			if(e.keyCode == 13){ // enter
+				updateRows(this);
 			}
-		}
-		/*else if(e.type == "keydown"){
+		}else if(e.type == "keyup"){
+			if(e.keyCode == 8){ // backspace
+				updateRows(this);
+			}
+			if(e.ctrlKey && e.keyCode == 86){ // Paste
+				updateRows(this);
+			}
+		}else if(e.type == "keydown"){
 			if(e.keyCode == 9){ // tab
 				var _this = $(this),
 				el = _this[0],
@@ -85,11 +86,19 @@ $(document ,":)", function(){
 				val = _this._("%");
 
 				val = (val.substr(0, cursorStartPoint) + "   " + val.substr(cursorStartPoint));
-				_this._("e{value="+val+"}");
+				_this._("e{0}",[{value:val}]);
+
+				this.setSelectionRange((cursorStartPoint + 3),(cursorStartPoint + 3));
 				e.preventDefault();
 			}
-		}*/
+		}
 	});
+
+	function updateRows(el){
+		var _this = $(el),
+		rows = _this._("%").split(String.fromCharCode(10)).length;
+		_this._("@{rows="+(rows)+"}");
+	}
 
 	function makeStringify(){
 		var json = "";
