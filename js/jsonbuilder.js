@@ -1,4 +1,5 @@
 // Author : Yogesh Jagdale
+var ky = /^(\d(.*))|((.*)?(-)(.*)?)$/;
 function json_object(op){
 	op = op || {};
 	this.key = op.key;
@@ -6,7 +7,6 @@ function json_object(op){
 	this.parent = op.parent;
 	this.name = "";
 	this.type = this.getType(op);
-	this.JSON = this.setJson(op);
 	if(!(op instanceof json_object)){
 		this.child = [];
 	}
@@ -15,7 +15,7 @@ function json_object(op){
 			this.parent.child.push(this);
 		}
 		this.superParent = this.parent.superParent;
-		this.setName();
+		this.setPathName();
 	}else if(!this.parent){ // main superparent parent
 		//this.name = [];
 		this.parent = null;
@@ -81,33 +81,18 @@ json_object.ext({
 			return null;
 		}
 	},
-	setName : function(){
+	setPathName : function(){
 		if(this.parent.type == "Object"){
-			this.name = this.parent.name;
+			//this.name = this.parent.name;
 		}else if(this.parent.type == "Array"){
 			var nm = "["+ (this.parent.child.length - 1) +"]";
 			this.name = this.parent.name;
-			//nm += "["+ (this.parent.child.length - 1) +"]";
 			this.name = nm;
-		}
-	},
-	setJson : function(op){
-		if(this.type == "Array"){
-			return [];
-		}else if(this.type == "Object"){
-			return {};
-		}else if(this.type == "String"){
-			return {string : op.val};
-		}else if(this.type == "Number"){
-			return {number : op.val};
-		}else{
-			return {};
 		}
 	},
 	setType : function(type){
 		type = type.val != undefined ? type.val : type;
 		this.type = this.getType({type:type});
-		this.JSON = this.setJson(this);
 		if(!this.parent){
 			this.name = this.type == "Object" ? "Object" : "Array";
 		}
@@ -115,7 +100,11 @@ json_object.ext({
 	setKey : function(key){
 		if(key && key != this.key){
 			this.key = key;
-			this.name = this.key;
+			if(ky.test(key)){
+				this.name = "['" + this.key + "']";
+			}else{
+				this.name = this.key;
+			}
 			this.getAccessName();
 			this.resetName();
 		}
@@ -174,7 +163,7 @@ json_object.ext({
 	},
 	buildAccessName : function(){
 		var n = this.name;
-		if(this.parent && this.parent.type == "Array"){
+		if((this.parent && this.parent.type == "Array") || ky.test(this.key)){
 			var a = this.parent.buildAccessName();
 			a = a.split(".");a[0] += n;n = "";a = a.join(".");
 			n += a;
@@ -347,6 +336,11 @@ function json_view(json_object){
 				_this.setVal.bind(this)(e, _this);
 			},
 			function(e){
+				if(_this.json_object.parent.type == "Number"){
+					if(isNaN(String.fromCharCode(e.keyCode))){
+						e.preventDefault();
+					}
+				}
 				if(e.keyCode == 13)e.preventDefault();
 			}
 		])[0];
@@ -367,7 +361,8 @@ function json_view(json_object){
 		$(json_object.parent_el,'>+{0}',[_this.html]);
 	}else if(is_firstChild){
 		if(is_object || is_array){
-			var add_sibling = "<div class='add_obj'></div>";
+			var add_sibling = "<div class='add_obj'></div>",
+			collapse_button = "<span class='collapse'></span>";
 			add_sibling = $('<->',add_sibling)._('+={click,0}.+={mouseenter,1}.+={mouseleave,1}',[
 				function(e){
 					_this.add_sibling.bind(this)(e, _this);
@@ -376,8 +371,13 @@ function json_view(json_object){
 					_this.highLight.bind(this)(e, _this);
 				}
 			])[0];
+			collapse_button = $('<->',collapse_button)._('+={click,0}', [
+				function(e){
+					_this.json_object.parent.view.exp_collapse();
+				}
+			])[0];
 			$(json_object.parent_el,'?{.json_init}.>|{0}.x',[_this.html]);
-			$(_this.html,'>|{0}',[add_sibling]);
+			$(_this.html,'>|{0}.|<{1}',[add_sibling,collapse_button]);
 			_this.html = $(_this.html,'?{.key_row}')[0];
 		}else if(is_number || is_string){
 			$(json_object.parent_el,'?{.json_init}.>|{0}.x',[_this.html]);
@@ -389,18 +389,18 @@ function json_view(json_object){
 			$(json_object.parent_el,'?{>.val >.json_block >.key_holder}.>+{0}',[_this.html]);
 		}
 	}
-	// if key is found then make it auto focuable
-	/*var keyEl = $(_this.html,'?{.objtxt}');
-	if(keyEl.length == 1){
-		keyEl = keyEl[0];
-		var selection = window.getSelection(),
-		range = document.createRange();
-
-		keyEl.innerHTML = "&nbsp;";
-		keyEl = keyEl.childNodes[0];
-		range.selectNodeContents(keyEl);
-		selection.addRange(range);
-	}*/
+	// auto focuable key and value
+	if(_this.json_object.parent){
+		if(_this.json_object.parent.type == "Object"){
+			var keyEl = $(_this.html,'?{.objtxt}');
+			if(keyEl.length == 1){
+				keyEl = keyEl[0];
+				selectNode(keyEl);
+			}
+		}else if(_this.json_object.parent.type == "String" || _this.json_object.parent.type == "Number"){
+			selectNode(_this.html);
+		}
+	}
 	return _this;
 }
 
@@ -498,14 +498,12 @@ json_view.ext({
 		}
 	},
 	setVal : function(e, _this, val){
-		if(!val){
-			var val = $(this,',');
-			if(val){
-				_this.json_object.setVal(val);
-			}
-		}else if(val){
+		if(e == null){ // we pass e as null when setVal get called manually
 			$(this.html, '>+{0}', [val]);
 			this.json_object.setVal(val);
+		}else if(e != null){ // setVal event get called by event
+			var v = $(this,',');
+			_this.json_object.setVal(v);
 		}
 	},
 	add_sibling : function(e, _this){
@@ -557,9 +555,24 @@ json_view.ext({
 					if(el.length) el._("x");
 					$(this.html,'?{>.val>.json_block}.>+{0}',[html]);
 				}
-			}else if(!this.json_object.parent){
-				$(this.html,'>+{0}',[html]);
+			}else if(this.json_object == this.json_object.superParent){
+				var el = $(this.html);
+				if(el._('?{>.path}').length == 1){
+					el._('x...>+{0}',[html]);
+				}else{
+					$(this.html,'>+{0}',[html]);
+				}
 			}
+		}
+	},
+	exp_collapse: function(){
+		var view = $(this.html);
+		if(view._('&h{row_collapse}')){
+			view._('&x{row_collapse}');
+			this.json_object.collapse = false;
+		}else{
+			view._('&+{row_collapse}');
+			this.json_object.collapse = false;
 		}
 	}
 });
@@ -584,4 +597,11 @@ Array.prototype.flat = function(obj){
     //if(cf) a = this.flat(a);
     if(cf) a = a.flat();
     return a;
+}
+function selectNode(node){
+	var selection = window.getSelection(),
+	range = document.createRange();
+	range.selectNodeContents(node);
+	selection.removeAllRanges();
+	selection.addRange(range);
 }

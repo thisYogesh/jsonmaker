@@ -26,10 +26,10 @@ keyframes process{0%{background-position:0 0}100%{background-position:-34px 0}}
 .json_editor{overflow:auto;max-height:600px;padding-left:8px}
 .json_op >i:last-child{border-right:0}
 .json_op >i:hover{background:#000;color:#fff}
-.json_block.iobj:before{content:"{"}
-.json_block.iobj:after{content:"}"}
-.json_block.iarr:before{content:"["}
-.json_block.iarr:after{content:"]"}
+.json_block.iobj:before{content:"{";vertical-align: top;}
+.json_block.iobj:after{content:"}";vertical-align: top;}
+.json_block.iarr:before{content:"[";vertical-align: top;}
+.json_block.iarr:after{content:"]";vertical-align: top;}
 .key_holder{padding:0 0 0 18px;border:1px solid #EEEEEE}
 .key_holder.to_add{background-color:#F7F7F7;border:1px dashed #CCCCCC;border-radius:2px}
 .key_holder.to_add .key_holder{border-color:#F7F7F7}
@@ -92,7 +92,7 @@ pre.result{background:#fff;padding:8px;border:1px solid #ddd;border-radius:2px;m
 .objval.num:empty:before{content:"Number";color:#B3B3B3}
 .path{position:absolute;left:100%;height:16px;line-height:15px;font-size:11px;margin-left:12px;margin-top:3px;color:#BDBDBD;text-shadow:0px 1px 0px #FFF;z-index:1;white-space:nowrap}
 .path:hover{color:#000}
-.json_block.iobj > .path,.json_block.iarr > .path{left:0;top:0}
+.json_block.iobj > .path,.json_block.iarr > .path{left:0;top:0;margin-left: 24px;}
 .info{color:#2A2A2A;font-size:15px}
 .info .ref{font-size:11px;font-style:italic}
 textarea.result{width:100%;padding:8px;border:1px solid #ddd;border-radius:2px;margin-top:8px;resize:none;overflow: hidden;}
@@ -108,3 +108,16 @@ textarea.result{width:100%;padding:8px;border:1px solid #ddd;border-radius:2px;m
 .t-point:first-child {margin-top: 0;}
 .t-point:last-child {margin-bottom: 0;}
 .cmd-btn{text-align:center}
+.expand, .collapse{display: none;width: 8px;height: 8px;background: #881391;vertical-align: middle;border-radius: 50%;border: 1px solid #fff;box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);cursor: pointer;}
+.collapse{display: inline-block;background: #979797;}
+.key_row.row_collapse >.val >.json_block >.key_holder{display: none;}
+.key_row.row_collapse >.key .path {margin-left: 38px;}
+.key .path {margin-left: 24px;}
+.collapse:hover {background-color: #881391;}
+.key_row.row_collapse >.val >.json_block >.add_obj{display: none}
+.key_row.row_collapse .collapse {background: #881391}
+.key_row.row_collapse .collapse:hover {background: #979797}
+.json_block.row_collapse > .key_holder {display: none}
+.json_block.row_collapse >.add_obj {display: none}
+.json_block.row_collapse >.path {margin-left: 30px}
+.json_block.row_collapse >.collapse {background: #881391}
