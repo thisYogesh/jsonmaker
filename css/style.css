@@ -114,11 +114,13 @@ textarea.result{width:100%;padding:8px;border:1px solid #ddd;border-radius:2px;m
 .key_row.row_collapse >.key .path {margin-left: 38px;}
 .key .path {margin-left: 24px;}
 .collapse:hover {background-color: #881391;}
+.json_block.row_collapse > .collapse {background: #881391}
 .key_row.row_collapse >.val >.json_block >.add_obj{display: none}
 .key_row.row_collapse .collapse {background: #881391}
 .key_row.row_collapse .collapse:hover {background: #979797}
 .json_block.row_collapse > .key_holder {display: none}
 .json_block.row_collapse >.add_obj {display: none}
+.json_block.row_collapse >.path {margin-left: 30px!important}
 .key_row.row_collapse>.val>.json_block.iarr>.path,
 .key_row.row_collapse>.val>.json_block.iobj>.path {margin-left: 30px}
 .objval.bool {height: 20px;display: inline-block;color: #FFFFFF;border: 1px solid #939393;background: #C0C0C0;border-radius: 2px;text-shadow: 1px 0px 1px #3A3A3A;cursor: pointer;}
