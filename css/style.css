@@ -121,3 +121,13 @@ textarea.result{width:100%;padding:8px;border:1px solid #ddd;border-radius:2px;m
 .json_block.row_collapse >.add_obj {display: none}
 .json_block.row_collapse >.path {margin-left: 30px}
 .json_block.row_collapse >.collapse {background: #881391}
+.objval.bool {
+    height: 20px;
+    display: inline-block;
+    color: #FFFFFF;
+    border: 1px solid #939393;
+    background: #C0C0C0;
+    border-radius: 2px;
+    text-shadow: 1px 0px 1px #3A3A3A;
+    cursor: pointer;
+}
