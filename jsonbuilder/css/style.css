@@ -66,7 +66,7 @@ keyframes process{0%{background-position:0 0}100%{background-position:-34px 0}}
 .objval.str{color:#C41A16}
 .objval[contenteditable]{display:inline-block;position:relative;z-index:1}
 .val.nonobj > .json_block{display:inline}
-.remove{position:absolute;background:url('../images/remove1.png');width:12px;height:12px;background-size:100%;z-index:2;left:-14px;top:5px;background-repeat:no-repeat;background-position:center;border-radius:50%;cursor:pointer}
+.remove{position: absolute;width: 12px;height: 12px;z-index: 2;left: -14px;top: 5px;cursor: pointer;text-align: center;color: #909090;background: #EEE;text-shadow: 1px 1px 1px #fff;}
 .add_obj,.remove{opacity:0}
 .json_editor:hover .add_obj,.json_editor:hover .remove{opacity:0.4}
 .add_obj:hover,.remove:hover{opacity:1!important}
@@ -124,3 +124,13 @@ textarea.result{width:100%;padding:8px;border:1px solid #ddd;border-radius:2px;m
 .key_row.row_collapse>.val>.json_block.iarr>.path,
 .key_row.row_collapse>.val>.json_block.iobj>.path {margin-left: 30px}
 .objval.bool {height: 20px;display: inline-block;color: #FFFFFF;border: 1px solid #939393;background: #C0C0C0;border-radius: 2px;text-shadow: 1px 0px 1px #3A3A3A;cursor: pointer;}
+.remove:before {content: "\f057";font-family: fontAwesome;font-size: 12px;display: inline-block;vertical-align: top;}
+
+/* advance option */
+.option_tray {position: absolute;left: 0;bottom: calc(100% + 1px);z-index: 1;background: #D0D0D0;border: 1px solid #B9B9B9;border-radius: 2px;color: #7B7B7B;padding: 2px 4px;text-shadow: 0px 1px 0px #fff;white-space: nowrap;height: 20px;}
+.ops.remove_obj:before{content: "\f057";font-family: fontAwesome;}
+.ops.reset_obj:before{content: "\f01e";font-family: fontAwesome;}
+.op_item{font-size: 12px;text-align: center;vertical-align: top;padding: 0 2px;display: inline-block}
+.ops.clone_obj:before {content: "\f24d";font-family: fontAwesome}
+.op_item>.ops {vertical-align: top}
+.ops:hover{color:#474747}
