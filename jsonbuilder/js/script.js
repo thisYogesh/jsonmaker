@@ -4,7 +4,7 @@ $(document ,":)", function(){
 	var jObj = {
 		project:{
 			name : 'jsonmaker',
-			version : "1.2"
+			version : 1.3
 		},
 		developer:{
 			name:{

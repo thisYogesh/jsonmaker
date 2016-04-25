@@ -1,12 +1,13 @@
 // Author : Yogesh Jagdale
-var ky = /^(\d(.*))|((.*)?(-)(.*)?)$/;
+var ky = /^(\d(.*))|((.*)?(-)(.*)?)$/,
+auto_mk = false; // if auto_mk variable is set to false then auto focus will not happen.
 function json_object(op){
 	op = op || {};
 	this.key = op.key;
 	this.val = op.val;
 	this.parent = op.parent;
 	this.name = "";
-	this.type = this.getType(op);
+	this.type = null;
 	if(!(op instanceof json_object)){
 		this.child = [];
 	}
@@ -40,8 +41,7 @@ json_object.ext({
 		key = key || "";
 		val = val || undefined;
 		if(this.type == "Array"){
-			if(this.parent)
-			$(this.view.html,'?{>.val}.&x{nonobj}.&+{obj}');
+			if(this.parent) $(this.view.html,'?{>.val}.&x{nonobj}.&+{obj}');
 			this.val = new this.constructor({
 				type : key,
 				parent : this,
@@ -50,8 +50,17 @@ json_object.ext({
 			});
 			this.getAccessName();
 		}else if(this.type == "Object"){
-			if(this.parent)
-			$(this.view.html,'?{>.val}.&x{nonobj}.&+{obj}');
+			if(this.parent) $(this.view.html,'?{>.val}.&x{nonobj}.&+{obj}');
+			this.val = new this.constructor({
+				type : val,
+				parent : this,
+				key : key,
+				view : this.view.html,
+				val : val
+			});
+			this.getAccessName();
+		}
+		else if(this.type == "Boolean"){
 			this.val = new this.constructor({
 				type : val,
 				parent : this,
@@ -75,8 +84,8 @@ json_object.ext({
 		this.val = val;
 	},
 	getType : function(op){
-		if(op.type != undefined){
-			return op.type.constructor.name
+		if(op != undefined){
+			return op.constructor.name
 		}else{
 			return null;
 		}
@@ -91,8 +100,8 @@ json_object.ext({
 		}
 	},
 	setType : function(type){
-		type = type.val != undefined ? type.val : type;
-		this.type = this.getType({type:type});
+		//type = type.val != undefined ? type.val : type;
+		this.type = this.getType(type);
 		if(!this.parent){
 			this.name = this.type == "Object" ? "Object" : "Array";
 		}
@@ -210,7 +219,6 @@ json_object.ext({
 						}
 					}else if(this.parent){
 						if(stringify == undefined){
-							stringify = {}
 							stringify = [];
 							stringify.push(this.child[i].stringify());
 						}else{
@@ -221,19 +229,21 @@ json_object.ext({
 					stringify = this.val.val;
 				}else if(this.type == "Number"){
 					stringify = Number(this.val.val);
+				}else if(this.type == "Boolean"){
+					stringify = this.val.val;
 				}
 			}
 		}
 		return stringify;
 	},
 	makeJSON : function(Obj){
-		this.reset();
-		var type = this.getType({type:Obj});
+		this.reset(); // if already json is present then reset
+		var type = this.getType(Obj);
 		if(type == "Object"){
 			this.setType({});
 			this.view.setTypeInView();
 			for(var key in Obj){
-				this.add();
+				auto_mk = true;this.add();auto_mk = false;
 				this.val.view.setKey(null, null, key);
 				this.val.makeJSON(Obj[key]);
 			}
@@ -241,14 +251,19 @@ json_object.ext({
 			this.setType([]);
 			this.view.setTypeInView();
 			for(var i=0;i<Obj.length; i++){
-				this.add();
+				auto_mk = true;this.add();auto_mk = false;
 				this.val.makeJSON(Obj[i]);
 			}
-		}else{
+		}else if(type == "String" || type == "Number"){
 			this.setType(type == "String" ? "" : 0);
 			this.view.setTypeInView();
-			this.add();
+			auto_mk = true;this.add();auto_mk = false;
 			this.val.view.setVal(null, null, Obj);
+		}else if(type == "Boolean"){
+			this.setType(true);
+			this.view.setTypeInView();
+			auto_mk = true;this.add();auto_mk = false;
+			this.val.view.setBoolVal(null, null, Obj);
 		}
 	}
 });
@@ -260,11 +275,12 @@ function json_view(json_object){
 	is_array = !json_object.view && json_object.parent && json_object.parent.type == "Array",
 	is_string = !json_object.view && json_object.parent && json_object.parent.type == "String",
 	is_number = !json_object.view && json_object.parent && json_object.parent.type == "Number",
+	is_boolean = !json_object.view && json_object.parent && json_object.parent.type == "Boolean",
 	is_firstChild = !json_object.view && json_object.parent && json_object.parent.child.length == 1;
 
 	_this.json_object = json_object;
 
-	if(is_object || is_array){	
+	if(is_object || is_array){
 		if(is_object){
 			if(is_firstChild)
 			html += "<div class='key_holder'><div class='line'></div>";
@@ -290,11 +306,13 @@ function json_view(json_object){
 		html += 				"<div class='json_block'>";
 		html += 					_this.json_init(json_object);
 		html += 				"</div>";
-	}else if(is_number || is_string){
+	}else if(is_number || is_string || is_boolean){
 		if(is_number){
 			html += 			"<span class='objval num' spellcheck='false' contenteditable></span>";
 		}else if(is_string){
 			html += 			"<span class='objval str' spellcheck='false' contenteditable></span>";
+		}else if(is_boolean){
+			html += 			"<span class='objval bool' spellcheck='false'></span>";
 		}
 	}
 
@@ -321,8 +339,7 @@ function json_view(json_object){
 		_this.html = $('<->',html)._(selector, [
 			function(e){
 				_this.remove.bind(this)(e, _this);
-			},
-			function(e){
+			}, function(e){
 				_this.open_option.bind(this)(e, _this);
 			}, function(e){
 				_this.option_controller.bind(this)(e, _this);
@@ -330,20 +347,27 @@ function json_view(json_object){
 				_this.triggerClick.bind(this)(e, _this);
 			}
 		])[0];
-	}else if(is_number || is_string){
-		_this.html = $('<->',html)._('+={blur,0}.+={keypress,1}',[
-			function(e){
-				_this.setVal.bind(this)(e, _this);
-			},
-			function(e){
-				if(_this.json_object.parent.type == "Number"){
-					if(isNaN(String.fromCharCode(e.keyCode))){
-						e.preventDefault();
+	}else if(is_number || is_string || is_boolean){
+		if(!is_boolean){
+			_this.html = $('<->',html)._('+={blur,0}.+={keypress,1}',[
+				function(e){
+					_this.setVal.bind(this)(e, _this);
+				},
+				function(e){
+					/*if(_this.json_object.parent.type == "Number"){
+						if(isNaN(String.fromCharCode(e.charCode))){
+							e.preventDefault();
+						}
 					}
+					if(e.charCode == 13)e.preventDefault();*/
 				}
-				if(e.keyCode == 13)e.preventDefault();
-			}
-		])[0];
+			])[0];
+		}else if(is_boolean){
+			_this.html = $('<->',html)._('+={click}.#{value=1}', function(e){
+				_this.setBoolVal.bind(this)(e, _this);
+			})[0];
+			_this.html.click();
+		}
 	}
 
 	if(is_object){
@@ -379,7 +403,7 @@ function json_view(json_object){
 			$(json_object.parent_el,'?{.json_init}.>|{0}.x',[_this.html]);
 			$(_this.html,'>|{0}.|<{1}',[add_sibling,collapse_button]);
 			_this.html = $(_this.html,'?{.key_row}')[0];
-		}else if(is_number || is_string){
+		}else if(is_number || is_string || is_boolean){
 			$(json_object.parent_el,'?{.json_init}.>|{0}.x',[_this.html]);
 		}
 	}else if(!json_object.view){ // if view is not present
@@ -390,15 +414,17 @@ function json_view(json_object){
 		}
 	}
 	// auto focuable key and value
-	if(_this.json_object.parent){
-		if(_this.json_object.parent.type == "Object"){
-			var keyEl = $(_this.html,'?{.objtxt}');
-			if(keyEl.length == 1){
-				keyEl = keyEl[0];
-				selectNode(keyEl);
+	if(auto_mk == false){
+		if(_this.json_object.parent){
+			if(_this.json_object.parent.type == "Object"){
+				var keyEl = $(_this.html,'?{.objtxt}');
+				if(keyEl.length == 1){
+					keyEl = keyEl[0];
+					selectNode(keyEl);
+				}
+			}else if(_this.json_object.parent.type == "String" || _this.json_object.parent.type == "Number"){
+				selectNode(_this.html);
 			}
-		}else if(_this.json_object.parent.type == "String" || _this.json_object.parent.type == "Number"){
-			selectNode(_this.html);
 		}
 	}
 	return _this;
@@ -431,12 +457,13 @@ json_view.ext({
 			_Array 	= "<input type='button' value='[] Array' class='op _Array'/>",
 			_String	= "<input type='button' value='\"\" String' class='op _String'/>",
 			_Number	= "<input type='button' value='0 Number' class='op _Number'/>",
+			_Boolean = "<input type='button' value='Boolean' class='op _Boolean'/>",
 			html 	= "";
 
-		if(!json_object.parent){
+		if(json_object == json_object.superParent){
 			html += _Object + _Array;
 		}else{
-			html += _String + _Number + _Object + _Array;
+			html += _String + _Number + _Boolean + _Object + _Array;
 		}
 		return html;
 	},
@@ -449,10 +476,13 @@ json_view.ext({
 			_this.json_object.setType([]);
 			_this.setTypeInView();
 		}else if(el._("&h{_String}")){
-			_this.json_object.setType({val : ""});
+			_this.json_object.setType("");
 			_this.setTypeInView();
-		}else if(el._("&h{_Number}") > -1){
-			_this.json_object.setType({val : 0});
+		}else if(el._("&h{_Number}")){
+			_this.json_object.setType(0);
+			_this.setTypeInView();
+		}else if(el._("&h{_Boolean}")){
+			_this.json_object.setType(true);
 			_this.setTypeInView();
 		}
 		el._('^.&x{show}');
@@ -475,6 +505,8 @@ json_view.ext({
 		}else if(this.json_object.type == "Object"){
 			$(this.html,'&x{iarr iobj}');
 		}else if(this.json_object.type == "Number"){
+			$(this.html,'&x{iarr iobj}');
+		}else if(this.json_object.type == "Boolean"){
 			$(this.html,'&x{iarr iobj}');
 		}
 	},
@@ -506,6 +538,33 @@ json_view.ext({
 			_this.json_object.setVal(v);
 		}
 	},
+	setBoolVal : function(e, _this, val){
+		if(e == null){
+			switch(val){
+				case true:
+					this.json_object.setVal(true);
+					$(this.html)._("e{innerHTML=true}.#{value=0}");
+					break;
+				case false:
+					this.json_object.setVal(false);
+					$(this.html)._("e{innerHTML=false}.#{value=1}");
+					break;
+			}
+		}else if(e != null){
+			var el = $(this),
+			v = el._('#{value}');
+			switch(v){
+				case '1':
+					_this.json_object.setVal(true);
+					el._("e{innerHTML=true}.#{value=0}");
+					break;
+				case '0':
+					_this.json_object.setVal(false);
+					el._("e{innerHTML=false}.#{value=1}");
+					break;
+			}
+		}
+	},
 	add_sibling : function(e, _this){
 		_this.json_object.add_sibling();
 	},
@@ -533,15 +592,23 @@ json_view.ext({
 	},
 	highLight: function(e, _this){
 		if(e.type == "mouseenter"){
-			$(_this.json_object.view.html,'^.&+{to_add}');
+			if(_this.json_object.parent != _this.json_object.superParent){
+				$(_this.json_object.parent_el,'?{>.val>.json_block>.key_holder}.&+{to_add}');
+			}else{
+				$(_this.json_object.parent_el,'?{>.key_holder}.&+{to_add}');
+			}
 		}else{
-			$(_this.json_object.view.html,'^.&x{to_add}');
+			if(_this.json_object.parent != _this.json_object.superParent){
+				$(_this.json_object.parent_el,'?{>.val>.json_block>.key_holder}.&x{to_add}');
+			}else{
+				$(_this.json_object.parent_el,'?{>.key_holder}.&x{to_add}');
+			}
 		}
 	},
 	setAccessName: function(name){
 		if(this.json_object.type){	
 			var html = "<span class='path'>"+ name +"</span>";
-			if(this.json_object.type == "String" || this.json_object.type == "Number"){
+			if(this.json_object.type == "String" || this.json_object.type == "Number" || this.json_object.type == "Boolean"){
 				var el = $(this.html,'?{>.val>.json_block>.path}');
 				if(el.length) el._("x");
 				$(this.html,'?{>.val>.json_block}.>+{0}',[html]);

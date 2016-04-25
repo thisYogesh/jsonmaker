@@ -605,7 +605,7 @@
         },
         dataget : function(e, args){ // get dataset properties
             this.forEach(args, function(a,b,c,d){
-                c[b] = e.dataset[b];
+                c[b] = e.dataset[b] ? e.dataset[b] : "";
             });
         }
     });
