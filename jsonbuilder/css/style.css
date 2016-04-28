@@ -72,6 +72,8 @@ keyframes process{0%{background-position:0 0}100%{background-position:-34px 0}}
 .objtxt[contenteditable]{display:inline-block;position:relative;z-index:1}
 .objtxt:active,.objtxt:focus{background:#fff;border:1px solid #4D90FE}
 .objtxt:empty:before{content:"Key";color:#B3B3B3}
+.objtxt.invalid{border:1px solid #b22;box-shadow: 0 0 5px rgba(187, 34, 34, 0.5)}
+.objtxt.invalid:before{content:"\f071";font-family: FontAwesome;position: absolute;right: 100%;top: 0;margin-right: 5px;color: #DAA520;text-shadow: 1px 1px 1px #fff}
 
 .add_obj{position:absolute;bottom:2px;left:14px;height:12px;width:12px;cursor: pointer;text-align: center;color: #909090;background: #EEE;text-shadow: 1px 1px 1px #fff}
 .add_obj:before {content: "\f055";font-family: fontAwesome;font-size: 12px;float: left;}
