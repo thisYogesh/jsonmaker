@@ -1,5 +1,5 @@
 //
-$(function(){
+$(document ,":)", function(){
 	var app = new json_builder_app("#jsonEditor");
 	var jObj = {
 		project:{
@@ -20,52 +20,53 @@ $(function(){
 		message:"Make your JSON while having your Coffee!"
 	}
 	json = app.json;
-	json.makeJSON({name : "yogesh"});
-	$(".stringify").click(function(){
+	json.makeJSON(jObj);
+	$(".stringify","+={click}",function(){
 		var json = makeStringify();
 		if(json){
 			var rows = json.split(String.fromCharCode(10)).length,
-			top = $(".result_pad").offset().top;//'e{offsetTop}'
+			top = $(".result_pad",'e{offsetTop}');
 
-			$(".result").removeClass("hide").val(json).attr("rows", rows);
-			$("html,body").animate({scrollTop : top});
+			$(".result","&x{hide}.e{value=''}.e{0}.@{1}",[{value:json},{rows:rows}]);
+			$("html,body", "e{0}", [{scrollTop : top}]);
 		}
-	}).get(0).click();
+	})[0].click();
 
-	$(".objectify").click(function(){
+	$(".objectify","+={click}",function(){
 		try{
-			var json_str = $(".result").val(),
+			var json_str = $(".result","%"),
 			json_obj = JSON.parse(json_str),
-			top = $("#jsonEditor").offset().top;
-			$(".parse_error").addClass("hide");
+			top = $("#jsonEditor",'e{offsetTop}');
+			$(".parse_error","&+{hide}");
 			json.makeJSON(json_obj);
-			$("html,body").animate({scrollTop : top - 10});
+			$("html,body", "e{0}", [{scrollTop : top - 10}]);
 		}catch(e){
 			var msg = "Error : " + e.message,
-			top = $(".result_pad").offset().top;
-			$(".parse_error").removeClass("hide").html(msg);
-			$("html,body").animate({scrollTop : top});
+			top = $(".result_pad",'e{offsetTop}');
+			$(".parse_error","&x{hide}.e{textContent=''}.e{0}",[{textContent:msg}]);
+			$("html,body", "e{0}", [{scrollTop : top}]);
 		}
 	});
 
-
-	$(".log").click(function(){
+	$(".log","+={click}", function(){
 		var json = makeStringify();
-		if(json && console){
-			console.group("{JSON : Maker}");
-			console.log(json);
-			console.groupEnd();
-		}else{
-			alert("Open your >_ console to see output!");
+		if(json){
+			if(console){
+				console.group("{JSON : Maker}");
+				console.log(json);
+				console.groupEnd();
+			}else{
+				alert("Open your >_ console to see output!");
+			}
 		}
 	});
 
-	$(".new-json").click(function(){
+	$(".new-json","+={click}", function(){
 		json.reset();
-		$(".result").val("").attr("rows",1);
+		$(".result","e{value=''}.@{rows=1}");
 	});
 
-	$(".result").bind("keypress keydown keyup", function(e){
+	$(".result","+={keypress keydown keyup}",function(e){
 		if(e.type == "keypress"){
 			if(e.keyCode == 13){ // enter
 				updateRows(this);
@@ -82,10 +83,10 @@ $(function(){
 				var _this = $(this),
 				el = _this[0],
 				cursorStartPoint = el.selectionStart,
-				val = _this.val();
+				val = _this._("%");
 
 				val = (val.substr(0, cursorStartPoint) + "   " + val.substr(cursorStartPoint));
-				_this.val(val);
+				_this._("e{0}",[{value:val}]);
 
 				this.setSelectionRange((cursorStartPoint + 3),(cursorStartPoint + 3));
 				e.preventDefault();
@@ -93,33 +94,33 @@ $(function(){
 		}
 	});
 
-	$(".myform").submit(function(e){
+	$(".myform","+={submit}", function(e){
 		var validate = true,
-		inps = $(this).find(".inp").removeClass("err"),
+		inps = $(this,'?{.inp}.&x{err}'),
 		data = {};
 
-		inps.each(function(){
-			var el = $(this);
-			if(el.val() == ""){
+		for(var i=0; i<inps.length; i++){
+			var el = $(inps[i]);
+			if(el._("%") == ""){
 				validate = false;
-				el.addClass("err");
-				return false;
+				el._("&+{err}");
+				break;
 			}else{
-				var name = el.attr('name'),
-				value = el.val();
+				var name = $(inps[i],'@{name}'),
+				value = $(inps[i],'%');
 				data[name] = value;
 			}
-		});
+		}
 		if(validate){
-			$(".sendmsg").text("SENDING");
-			$.ajax({
+			$(".sendmsg","e{0}",[{textContent:'SENDING'}]);
+			$('>X<{FD}',{
 			    url : 'http://localhost:8080/contactus',
 			    type : 'POST',
 			    data : data,
 			    success : function(resp){
 			    	if(resp.status == 0){
-			    		$(".sendmsg").text("SEND");
-			    		$(".inp").val("");
+				        $(".sendmsg","e{0}",[{textContent:'SEND'}]);
+				        $(".inp","e{value=''}");
 			    	}else{
 			    		showErr();
 			    	}
@@ -134,18 +135,18 @@ $(function(){
 	
 	var errTm;
 	function showErr(){
-		$(".sendmsg").text("SEND");
-		$(".err-msg").removeClass("hide");
+		$(".sendmsg","e{0}",[{textContent:'SEND'}]);
+		$(".err-msg","&x{hide}");
 		clearTimeout(errTm);
 		errTm = setTimeout(function(){
-			$(".err-msg").addClass("hide");	
+			$(".err-msg","&+{hide}");
 		}.bind(),5000);
 	}
 
 	function updateRows(el){
 		var _this = $(el),
-		rows = _this.val().split(String.fromCharCode(10)).length;
-		_this.attr("rows", rows);
+		rows = _this._("%").split(String.fromCharCode(10)).length;
+		_this._("@{rows="+(rows)+"}");
 	}
 
 	function makeStringify(){

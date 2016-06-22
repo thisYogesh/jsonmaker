@@ -41,8 +41,7 @@ json_object.ext({
 		key = key || "";
 		val = val || undefined;
 		if(this.type == "Array"){
-			if(this.parent) $(this.view.html).find(">.val").removeClass("nonobj").addClass("obj");
-
+			if(this.parent) $(this.view.html,'?{>.val}.&x{nonobj}.&+{obj}');
 			this.val = new this.constructor({
 				type : key,
 				parent : this,
@@ -51,7 +50,7 @@ json_object.ext({
 			});
 			this.getAccessName();
 		}else if(this.type == "Object"){
-			if(this.parent) $(this.view.html).find(">.val").removeClass("nonobj").addClass("obj");
+			if(this.parent) $(this.view.html,'?{>.val}.&x{nonobj}.&+{obj}');
 			this.val = new this.constructor({
 				type : val,
 				parent : this,
@@ -331,88 +330,94 @@ function json_view(json_object){
 	}
 
 	if(is_object || is_array || !json_object.parent || json_object.view){
+		var selector;
 		if(!json_object.parent || json_object.view){
-			_this.html = $(html).find(".json_init").data("op", "close").click(function(e){
-				_this.open_option.bind(this)(e, _this);
-			}).keypress(function(e){
-				_this.triggerClick.bind(this)(e, _this);
-			}).find(".op").click(function(e){
-				_this.option_controller.bind(this)(e, _this);
-			}).keypress(function(e){
-				_this.triggerClick.bind(this)(e, _this);
-			}).end().end().get(0);
+			selector = '?{.json_init}.#{op=close}.+={click,1}.+={keypress,3}.?{.op}.+={click,2}.+={keypress,3}....';
 		}else{
-			_this.html = $(html).find(".remove").click(function(e){
-				_this.remove.bind(this)(e, _this);
-			}).parent().find(".json_init").data("op","close").click(function(e){
-				_this.open_option.bind(this)(e, _this);
-			}).keypress(function(e){
-				_this.triggerClick.bind(this)(e, _this);
-			}).find(".op").click(function(e){
-				_this.option_controller.bind(this)(e, _this);
-			}).keypress(function(e){
-				_this.triggerClick.bind(this)(e, _this);
-			}).end().end().end().end().get(0);
+			selector = '?{.remove}.+={click,0}.^.?{.json_init}.#{op=close}.+={click,1}.+={keypress,3}.?{.op}.+={click,2}.+={keypress,3}........';
 		}
+		_this.html = $('<->',html)._(selector, [
+			function(e){
+				_this.remove.bind(this)(e, _this);
+			}, function(e){
+				_this.open_option.bind(this)(e, _this);
+			}, function(e){
+				_this.option_controller.bind(this)(e, _this);
+			}, function(e){
+				_this.triggerClick.bind(this)(e, _this);
+			}
+		])[0];
 	}else if(is_number || is_string || is_boolean){
 		if(!is_boolean){
-			_this.html = $(html).blur(function(e){
-				_this.setVal.bind(this)(e, _this);
-			}).keypress(function(){}).get(0);
+			_this.html = $('<->',html)._('+={blur,0}.+={keypress,1}',[
+				function(e){
+					_this.setVal.bind(this)(e, _this);
+				},
+				function(e){
+					/*if(_this.json_object.parent.type == "Number"){
+						if(isNaN(String.fromCharCode(e.charCode))){
+							e.preventDefault();
+						}
+					}
+					if(e.charCode == 13)e.preventDefault();*/
+				}
+			])[0];
 		}else if(is_boolean){
-			_this.html = $(html).click(function(e){
+			_this.html = $('<->',html)._('+={click}.#{value=1}', function(e){
 				_this.setBoolVal.bind(this)(e, _this);
-			}).data("value", 1).get(0);
-			$(_this.html).click();
+			})[0];
+			_this.html.click();
 		}
 	}
 
 	if(is_object){
-		$(_this.html).find(".objtxt").blur(function(e){
-			_this.setKey.bind(this)(e, _this);
-		}).keypress(function(){
-			if(e.keyCode == 13)e.preventDefault();
-		});
+		$(_this.html, '?{.objtxt}.+={blur,0}.+={keypress,1}', [
+			function(e){
+				_this.setKey.bind(this)(e, _this);
+			},
+			function(e){
+				if(e.keyCode == 13)e.preventDefault();
+			}
+		]);
 	}
 	/* append to the parent */
 	if(!json_object.parent && !json_object.view){ // superParent
-		$(json_object.parent_el).append(_this.html);
-		//$(json_object.parent_el,'>+{0}',[_this.html]);
+		$(json_object.parent_el,'>+{0}',[_this.html]);
 	}else if(is_firstChild){
 		if(is_object || is_array){
 			var add_sibling = "<div class='add_obj'></div>",
 			collapse_button = "<span class='collapse'></span>";
-			add_sibling = $(add_sibling).click(function(e){
-				_this.add_sibling.bind(this)(e, _this);
-			}).mouseenter(function(e){	
-				_this.highLight.bind(this)(e, _this);
-			}).mouseleave(function(e){
-				_this.highLight.bind(this)(e, _this);
-			}).get(0);
-			
-			collapse_button = $(collapse_button).click(function(){
-				_this.json_object.parent.view.exp_collapse();
-			}).get(0);
-			
-			$(json_object.parent_el).find(".json_init").after(_this.html).remove();
-			$(_this.html).after(add_sibling).before(collapse_button);
-			
-			_this.html = $(_this.html).find('.key_row').get(0);
+			add_sibling = $('<->',add_sibling)._('+={click,0}.+={mouseenter,1}.+={mouseleave,1}',[
+				function(e){
+					_this.add_sibling.bind(this)(e, _this);
+				},
+				function(e){
+					_this.highLight.bind(this)(e, _this);
+				}
+			])[0];
+			collapse_button = $('<->',collapse_button)._('+={click,0}', [
+				function(e){
+					_this.json_object.parent.view.exp_collapse();
+				}
+			])[0];
+			$(json_object.parent_el,'?{.json_init}.>|{0}.x',[_this.html]);
+			$(_this.html,'>|{0}.|<{1}',[add_sibling,collapse_button]);
+			_this.html = $(_this.html,'?{.key_row}')[0];
 		}else if(is_number || is_string || is_boolean){
-			$(json_object.parent_el).find(".json_init").after(_this.html).remove();
+			$(json_object.parent_el,'?{.json_init}.>|{0}.x',[_this.html]);
 		}
 	}else if(!json_object.view){ // if view is not present
 		if(!json_object.parent.parent){
-			$(json_object.parent_el).find(">.key_holder").append(_this.html);
+			$(json_object.parent_el,'?{>.key_holder}.>+{0}',[_this.html]);
 		}else{
-			$(json_object.parent_el).find(">.val >.json_block >.key_holder").append(_this.html);
+			$(json_object.parent_el,'?{>.val >.json_block >.key_holder}.>+{0}',[_this.html]);
 		}
 	}
 	// auto focuable key and value
 	if(auto_mk == false){
 		if(_this.json_object.parent){
 			if(_this.json_object.parent.type == "Object"){
-				var keyEl = $(_this.html).find('.objtxt');
+				var keyEl = $(_this.html,'?{.objtxt}');
 				if(keyEl.length == 1){
 					keyEl = keyEl[0];
 					selectNode(keyEl);
@@ -464,53 +469,53 @@ json_view.ext({
 	},
 	option_controller : function(e, _this){
 		var el = $(this);
-		if(el.hasClass("_Object")){
+		if(el._("&h{_Object}")){
 			_this.json_object.setType({});
 			_this.setTypeInView();
-		}else if(el.hasClass("_Array")){
+		}else if(el._("&h{_Array}")){
 			_this.json_object.setType([]);
 			_this.setTypeInView();
-		}else if(el.hasClass("_String")){
+		}else if(el._("&h{_String}")){
 			_this.json_object.setType("");
 			_this.setTypeInView();
-		}else if(el.hasClass("_Number")){
+		}else if(el._("&h{_Number}")){
 			_this.json_object.setType(0);
 			_this.setTypeInView();
-		}else if(el.hasClass("_Boolean")){
+		}else if(el._("&h{_Boolean}")){
 			_this.json_object.setType(true);
 			_this.setTypeInView();
 		}
-		el.parent().removeClass("show");
+		el._('^.&x{show}');
 		_this.json_object.add();
 		e.stopPropagation();
 	},
 	setTypeInView : function(){
 		if(this.json_object.type == "Object"){
-			if( $(this.html).hasClass("json_block") ){
-				$(this.html).removeClass("iarr").addClass("iobj");
+			if( $(this.html, '&h{json_block}') ){
+				$(this.html,'&x{iarr}.&+{iobj}');
 			}else{
-				$(this.html).find(".json_object").removeClass("iarr").addClass("iobj");
+				$(this.html,'?{.json_block}.&x{iarr}.&+{iobj}');
 			}
 		}else if(this.json_object.type == "Array"){
-			if( $(this.html).hasClass("json_block") ){
-				$(this.html).removeClass("iobj").addClass("iarr");
+			if( $(this.html, '&h{json_block}') ){
+				$(this.html,'&x{iobj}.&+{iarr}');
 			}else{
-				$(this.html).find(".json_object").removeClass("iobj").addClass("iarr");
+				$(this.html,'?{.json_block}.&x{iobj}.&+{iarr}');
 			}
 		}else if(this.json_object.type == "Object"){
-			$(this.html).removeClass("iarr iobj");
+			$(this.html,'&x{iarr iobj}');
 		}else if(this.json_object.type == "Number"){
-			$(this.html).removeClass("iarr iobj");
+			$(this.html,'&x{iarr iobj}');
 		}else if(this.json_object.type == "Boolean"){
-			$(this.html).removeClass("iarr iobj");
+			$(this.html,'&x{iarr iobj}');
 		}
 	},
 	open_option : function(e, _this){
 		var el = $(this);
-		if(el.data("op") == "close"){
-			el.data("op", "open").find(".json_op").addClass("show");
+		if(el._('#{op}') == "close"){
+			el._('#{op=open}.?{.json_op}.&+{show}');
 		}else{
-			el.data("op","close").find(".json_op").removeClass("show");
+			el._('#{op=close}.?{.json_op}.&x{show}');
 		}
 	},
 	setKey : function(e, _this, key){
@@ -520,16 +525,16 @@ json_view.ext({
 				_this.json_object.setKey(key);
 			}
 		}else if(key){ // called by programatic
-			$(this.html).find(".objtxt").append(key);
+			$(this.html, '?{.objtxt}.>+{0}', [key]);
 			this.json_object.setKey(key);
 		}
 	},
 	setVal : function(e, _this, val){
 		if(e == null){ // we pass e as null when setVal get called manually
-			$(this.html).text(val); // value should be put as text only
+			$(this.html, 'e{0}', [{textContent:val}]); // value should be put as text only
 			this.json_object.setVal(val);
 		}else if(e != null){ // setVal event get called by event
-			var v = $(this).text();
+			var v = $(this,',');
 			_this.json_object.setVal(v);
 		}
 	},
@@ -538,24 +543,24 @@ json_view.ext({
 			switch(val){
 				case true:
 					this.json_object.setVal(true);
-					$(this.html).html("true").data("value", "0");
+					$(this.html)._("e{innerHTML=true}.#{value=0}");
 					break;
 				case false:
 					this.json_object.setVal(false);
-					$(this.html).html("false").data("value", "1");
+					$(this.html)._("e{innerHTML=false}.#{value=1}");
 					break;
 			}
 		}else if(e != null){
 			var el = $(this),
-			v = el.data("value");
+			v = el._('#{value}');
 			switch(v){
 				case '1':
 					_this.json_object.setVal(true);
-					el.html("true").data("value", "0");
+					el._("e{innerHTML=true}.#{value=0}");
 					break;
 				case '0':
 					_this.json_object.setVal(false);
-					el.html("false").data("value", "1");
+					el._("e{innerHTML=false}.#{value=1}");
 					break;
 			}
 		}
@@ -570,48 +575,70 @@ json_view.ext({
 	reset: function(){
 		var resetView = new this.constructor(this.json_object);
 		if(this.json_object.parent){
-			["String", "Number"].indexOf(this.json_object.parent.type) != -1 ? $(this.json_object.parent.view.html).find(">.val").removeClass("obj").addClass("nonobj").find(">.json_block").after(resetView.html).remove() : $(this.html).find(">.val").removeClass("obj").addClass("nonobj").find(">.json_block").after(resetView.html).remove();
+			var sr = '?{>.val}.&x{obj}.&+{nonobj}.?{>.json_block}.>|{0}.x';
+			if(["String", "Number"].indexOf(this.json_object.parent.type) != -1){
+				$(this.json_object.parent.view.html, sr, [resetView.html]);
+			}else{
+				$(this.html, sr, [resetView.html]);
+			}
 		}else{
-			$(this.html).after(resetView.html).remove();
+			$(this.html, '>|{0}.x', [resetView.html]);
 			this.html = resetView.html;
 		}
-		var path = $(this.html).find(".path");
-		if( path.length > 0) path.remove();
+		var path = $(this.html,'?{.path}');
+		if( path.length > 0){
+			path._("x");
+		}
 	},
 	highLight: function(e, _this){
-		if(e.type == "mouseenter") _this.json_object.parent != _this.json_object.superParent ? $(_this.json_object.parent_el).find(">.val>.json_block>.key_holder").addClass("to_add") : $(_this.json_object.parent_el).find(">.key_holder").addClass("to_add");
-		else _this.json_object.parent != _this.json_object.superParent ? $(_this.json_object.parent_el).find(">.val>.json_block>.key_holder").removeClass("to_add") : $(_this.json_object.parent_el).find(">.key_holder").removeClass("to_add");
+		if(e.type == "mouseenter"){
+			if(_this.json_object.parent != _this.json_object.superParent){
+				$(_this.json_object.parent_el,'?{>.val>.json_block>.key_holder}.&+{to_add}');
+			}else{
+				$(_this.json_object.parent_el,'?{>.key_holder}.&+{to_add}');
+			}
+		}else{
+			if(_this.json_object.parent != _this.json_object.superParent){
+				$(_this.json_object.parent_el,'?{>.val>.json_block>.key_holder}.&x{to_add}');
+			}else{
+				$(_this.json_object.parent_el,'?{>.key_holder}.&x{to_add}');
+			}
+		}
 	},
 	setAccessName: function(name){
 		if(this.json_object.type){	
 			var html = "<span class='path'>"+ name +"</span>";
 			if(this.json_object.type == "String" || this.json_object.type == "Number" || this.json_object.type == "Boolean"){
-				var el = $(this.html).find(">.val>.json_block>.path");
-				if(el.length) el.remove();
-				$(this.html).find(">.val>.json_block").append(html);
+				var el = $(this.html,'?{>.val>.json_block>.path}');
+				if(el.length) el._("x");
+				$(this.html,'?{>.val>.json_block}.>+{0}',[html]);
 			}else if(this.json_object.parent){
 				if(this.json_object.parent.type == "Object"){
-					var el = $(this.html).find('>.key>.path');
-					if(el.length) el.remove();
-					$(this.html).find(">.key").append(html);
+					var el = $(this.html,'?{>.key>.path}');
+					if(el.length) el._("x");
+					$(this.html,'?{>.key}.>+{0}',[html]);
 				}else if(this.json_object.parent.type == "Array"){
-					var el = $(this.html).find('>.val>.json_block>.path');
-					if(el.length) el.remove();
-					$(this.html).find(">.val>.json_block").append(html);
+					var el = $(this.html,'?{>.val>.json_block>.path}');
+					if(el.length) el._("x");
+					$(this.html,'?{>.val>.json_block}.>+{0}',[html]);
 				}
 			}else if(this.json_object == this.json_object.superParent){
 				var el = $(this.html);
-				el.find(">.path").length == 1 ? el.remove().end().append(html) : $(this.html).append(html);
+				if(el._('?{>.path}').length == 1){
+					el._('x...>+{0}',[html]);
+				}else{
+					$(this.html,'>+{0}',[html]);
+				}
 			}
 		}
 	},
 	exp_collapse: function(){
 		var view = $(this.html);
-		if( view.hasClass("row_collapse") ){
-			view.removeClass("row_collapse");
+		if(view._('&h{row_collapse}')){
+			view._('&x{row_collapse}');
 			this.json_object.collapse = false;
 		}else{
-			view.addClass("row_collapse");
+			view._('&+{row_collapse}');
 			this.json_object.collapse = false;
 		}
 	}
