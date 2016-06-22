@@ -14,7 +14,7 @@ $(document ,":)", function(){
 			age:24,
 			hobies:[
 				"Reading",
-				"Programming"
+				"<h1>Programming</h1>"
 			]
 		},
 		message:"Make your JSON while having your Coffee!"
@@ -93,6 +93,55 @@ $(document ,":)", function(){
 			}
 		}
 	});
+
+	$(".myform","+={submit}", function(e){
+		var validate = true,
+		inps = $(this,'?{.inp}.&x{err}'),
+		data = {};
+
+		for(var i=0; i<inps.length; i++){
+			var el = $(inps[i]);
+			if(el._("%") == ""){
+				validate = false;
+				el._("&+{err}");
+				break;
+			}else{
+				var name = $(inps[i],'@{name}'),
+				value = $(inps[i],'%');
+				data[name] = value;
+			}
+		}
+		if(validate){
+			$(".sendmsg","e{0}",[{textContent:'SENDING'}]);
+			$('>X<{FD}',{
+			    url : 'http://localhost:8080/contactus',
+			    type : 'POST',
+			    data : data,
+			    success : function(resp){
+			    	if(resp.status == 0){
+				        $(".sendmsg","e{0}",[{textContent:'SEND'}]);
+				        $(".inp","e{value=''}");
+			    	}else{
+			    		showErr();
+			    	}
+			    },
+			    error : function(){
+			    	showErr();
+			    }
+			});
+		}
+		e.preventDefault();
+	});
+	
+	var errTm;
+	function showErr(){
+		$(".sendmsg","e{0}",[{textContent:'SEND'}]);
+		$(".err-msg","&x{hide}");
+		clearTimeout(errTm);
+		errTm = setTimeout(function(){
+			$(".err-msg","&+{hide}");
+		}.bind(),5000);
+	}
 
 	function updateRows(el){
 		var _this = $(el),

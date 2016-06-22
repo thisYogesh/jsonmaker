@@ -30,7 +30,7 @@
     jSymbolic.fun = jSymbolic.prototype = {
         _: function (sel, symbols, op) { 
             /* 
-                op : it is used for callback function 
+                op : it is used for callback function
                 symbols : it is used for the assign symbols
             */
 			var args = arguments;//
@@ -84,7 +84,7 @@
                 if(this.fn.symType == "udf"){ // for plugin
                     this[this.fn.fun](ele, this.op);
                 }else if(!this.fn.param){ // standalone symbol
-                    if(!ele.length){
+                    if(!ele.length || ele.nodeName == "FORM" || ele.nodeName == "SELECT"){ // fallback for if element is </form>, </select>
                         this[this.fn.fun](ele, this.fn.param, this.op);
                     }else{
                         var el = [];
@@ -92,22 +92,22 @@
                             this.fn.symType == "context" ? this.IFC = true : this.IFC;
                             for( var x = 0; x < ele.length; x++ ){
                                 if(this.IFC) {
-                                        var elm = this[this.fn.fun](ele[x], this.fn.param, this.op);
-                                        if(elm.length > 0){
-                                            elm = this.cleanObject(elm);
-                                            for(var i=0; i<elm.length; i++){
-                                                if(el.indexOf(elm[i]) == -1){
-                                                    el.push(elm[i]);
-                                                }
-                                            }
-                                        }else{
-                                            if(el.indexOf(elm) == -1){
-                                                el.push(elm);
+                                    var elm = this[this.fn.fun](ele[x], this.fn.param, this.op);
+                                    if(elm.length > 0){
+                                        elm = this.cleanObject(elm);
+                                        for(var i=0; i<elm.length; i++){
+                                            if(el.indexOf(elm[i]) == -1){
+                                                el.push(elm[i]);
                                             }
                                         }
                                     }else{
-                                        this[this.fn.fun](ele[x],this.fn.param, this.op);
+                                        if(el.indexOf(elm) == -1){
+                                            el.push(elm);
+                                        }
                                     }
+                                }else{
+                                    this[this.fn.fun](ele[x],this.fn.param, this.op);
+                                }
                             }
                             this.IFC = false;
 
@@ -123,7 +123,7 @@
                     }
                 }else if(this.fn.param){ // parameterised symbol
                     if(this.fn.symType != "function"){
-                        if(!ele.length){
+                        if(!ele.length || ele.nodeName == "FORM" || ele.nodeName == "SELECT"){ // fallback for if element is </form>, </select>
                             this[this.fn.fun](ele, this.fn.param, this.op);
                         }else{
                             var el = [];
@@ -173,7 +173,7 @@
                             cf = true;
                             a.push(this.cleanObject(obj[i][c]));
                         }else{
-                            a.push(obj[i][c])
+                            a.push(obj[i][c]);
                         }
                     }
                 }else{
@@ -932,14 +932,30 @@
 
     jSymbolic.ext({
         ajax : function(sel, op){
+            if(/\{||\}/.test(sel)){
+                var filDt = this.filterSymbols(sel,op);
+                if(filDt.length > 0){
+                    filDt = filDt[0] // we are sure here that only one symbol shall return
+                    if(filDt.param == "FD"){ // FD for FormData
+                        var pfd = []; op.contentType = "application/x-www-form-urlencoded";
+                        for(var p in op.data){
+                            pfd.push(p + "=" + op.data[p]);
+                        }
+                        if( pfd.length > 0 )op.data = pfd.join('&');
+                    }
+                }
+            }else{
+                if(op.data)op.data = JSON.stringify(op.data);
+            }
             var op = this.obExt({
                 type : "GET",
                 url : "",
-                data : {},
+                data : null,
                 dataType : "",
                 timeout : null,
                 success : null,
-                error : null
+                error : null,
+                contentType : '' //application/x-www-form-urlencoded
             }, op);
 
             var ajaxObj = (function(w){
@@ -959,6 +975,7 @@
 
             if(ajaxObj.type != 0 && ajaxObj.type == 1){ // for XMLHttpRequest
                 ajaxObj.ajax_.open(op.type, op.url);
+                ajaxObj.ajax_.setRequestHeader('Content-type', op.contentType)
                 ajaxObj.ajax_.onreadystatechange = function(resp){
                     if(resp.currentTarget.readyState == 4){
                         var response = resp.currentTarget.responseText;
