@@ -531,7 +531,7 @@ json_view.ext({
 	},
 	setVal : function(e, _this, val){
 		if(e == null){ // we pass e as null when setVal get called manually
-			$(this.html, '>+{0}', [val]);
+			$(this.html, 'e{0}', [{textContent:val}]); // value should be put as text only
 			this.json_object.setVal(val);
 		}else if(e != null){ // setVal event get called by event
 			var v = $(this,',');

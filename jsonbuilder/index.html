@@ -12,6 +12,7 @@
 	<meta property="og:title"         content="JsonMaker" />
 	<meta property="og:description"   content="Create your JSON easily with {json:maker}" />
 	<meta property="og:image"         content="http://www.jsonmaker.com/images/fb_logo.png" />
+	<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
 	<script type="text/javascript" src="js/jSymbolic.js"></script>
 	<script type="text/javascript" src="js/jsonbuilder.js"></script>
 	<script type="text/javascript" src="js/app.js"></script>
@@ -42,6 +43,20 @@
      fjs.parentNode.insertBefore(js, fjs);
    }(document, 'script', 'facebook-jssdk'));
 </script>
+<style type="text/css">
+	/*
+	@media only screen and (-webkit-min-device-pixel-ratio:0){
+	    div{
+			color:#fff
+	    }
+	}
+	@-moz-document url-prefix() { 
+		div{
+			color:#fff
+		}
+	}
+	*/
+</style>
 </head>
 <body>
 	<div id="fb-root"></div>
@@ -62,13 +77,16 @@
 				<li class="active">
 					<a href="#">JSON Maker</a>
   				</li>
-				<li>
-					<a href="REST/">REST API Client</a>
+  				<li>
+					<a href="">Contact</a>
   				</li>
+				<!--li>
+					<a href="REST/">REST API Client</a>
+  				</li-->
   			</ul>
 		</h1>
 	</div>
-	<div class="container" style="">
+	<section class="container jsoneditor">
 		<p class="info">
 			JSON (JavaScript Object Notation) is a lightweight data-interchange format.
 			It is easy for humans to read and write. It is easy for machines to parse and generate.
@@ -80,8 +98,6 @@
 			These properties make JSON an ideal data-interchange language.
 			<span class="ref">Referred from : http://www.json.org</span>
 		</p>
-	</div>
-	<section class="container">
 		<div id="jsonEditor">
 			<button class="cmd new-json">Create New JSON</button>
 		</div>
@@ -119,6 +135,39 @@
 				data-action="like" 
 				data-show-faces="true" 
 				data-share="true"></div>
+		</div>
+	</section>
+	<section class="container contactus">
+		<h1>Contact 
+			<span class="mypk"></span>Yogesh
+			<a class="linkedin" target="_blank" href="https://www.linkedin.com/in/YogeshJagdale">https://www.linkedin.com/in/YogeshJagdale</a>
+		</h1>
+		<div class="_block">
+			<form class="myform" method="post" action="http://localhost:8080/contactus">
+				<div class="row">
+					<label>Name</label><input type="text" class="inp" name="name" placeholder="Type Your Name">
+				</div>
+				<div class="row">
+					<label>Email</label><input type="text" class="inp" name="email" placeholder="Type Your Email">
+				</div>
+				<div class="row">
+					<label>Profession</label><select class="inp" name="profession">
+						<option value="">Select your profession</option>
+						<option value="IT">IT</option>
+						<option value="HR">HR</option>
+						<option value="Other">Other</option>
+					</select>
+				</div>
+				<div class="row">
+					<label>Reason</label><textarea class="inp" name="reason" placeholder="Type Your Reason"></textarea>
+				</div>
+				<div class="row">
+					<label></label><button class="sendmsg">SEND</button>
+				</div>
+				<div class="row hide err-msg">
+					<label></label><span class="errm">Hey! Sorry, There might be some issue in backend, Please try again!</span>
+				</div>
+			</form>
 		</div>
 	</section>
 	<section class="foot">
