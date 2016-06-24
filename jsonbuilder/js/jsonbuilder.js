@@ -370,8 +370,8 @@ function json_view(json_object){
 	if(is_object){
 		$(_this.html).find(".objtxt").blur(function(e){
 			_this.setKey.bind(this)(e, _this);
-		}).keypress(function(){
-			if(e.keyCode == 13)e.preventDefault();
+		}).keypress(function(e){
+			if(e.keyCode == 13) e.preventDefault();
 		});
 	}
 	/* append to the parent */
@@ -489,13 +489,13 @@ json_view.ext({
 			if( $(this.html).hasClass("json_block") ){
 				$(this.html).removeClass("iarr").addClass("iobj");
 			}else{
-				$(this.html).find(".json_object").removeClass("iarr").addClass("iobj");
+				$(this.html).find(".json_block").removeClass("iarr").addClass("iobj");
 			}
 		}else if(this.json_object.type == "Array"){
 			if( $(this.html).hasClass("json_block") ){
 				$(this.html).removeClass("iobj").addClass("iarr");
 			}else{
-				$(this.html).find(".json_object").removeClass("iobj").addClass("iarr");
+				$(this.html).find(".json_block").removeClass("iobj").addClass("iarr");
 			}
 		}else if(this.json_object.type == "Object"){
 			$(this.html).removeClass("iarr iobj");
@@ -515,7 +515,7 @@ json_view.ext({
 	},
 	setKey : function(e, _this, key){
 		if(!key){ // called by blur event
-			key = $(this,',');
+			key = $(this).text();
 			if(key){
 				_this.json_object.setKey(key);
 			}
@@ -538,24 +538,24 @@ json_view.ext({
 			switch(val){
 				case true:
 					this.json_object.setVal(true);
-					$(this.html).html("true").data("value", "0");
+					$(this.html).html("true").data("value", 0);
 					break;
 				case false:
 					this.json_object.setVal(false);
-					$(this.html).html("false").data("value", "1");
+					$(this.html).html("false").data("value", 1);
 					break;
 			}
 		}else if(e != null){
 			var el = $(this),
 			v = el.data("value");
 			switch(v){
-				case '1':
+				case 1:
 					_this.json_object.setVal(true);
-					el.html("true").data("value", "0");
+					el.html("true").data("value", 0);
 					break;
-				case '0':
+				case 0:
 					_this.json_object.setVal(false);
-					el.html("false").data("value", "1");
+					el.html("false").data("value", 1);
 					break;
 			}
 		}
@@ -564,7 +564,7 @@ json_view.ext({
 		_this.json_object.add_sibling();
 	},
 	remove: function(e, _this){
-		$(_this.json_object.view.html ,'x'); // removed the element from DOM
+		$(_this.json_object.view.html).remove(); // removed the element from DOM
 		_this.json_object.remove();
 	},
 	reset: function(){
@@ -601,7 +601,7 @@ json_view.ext({
 				}
 			}else if(this.json_object == this.json_object.superParent){
 				var el = $(this.html);
-				el.find(">.path").length == 1 ? el.remove().end().append(html) : $(this.html).append(html);
+				el.find(">.path").length == 1 ? el.find(">.path").remove().end().append(html) : $(this.html).append(html);
 			}
 		}
 	},

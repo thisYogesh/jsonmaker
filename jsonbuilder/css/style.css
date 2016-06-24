@@ -49,6 +49,7 @@ h1{font-size:1.5em}
 .key_holder{padding:0 0 0 18px;border:1px solid #EEEEEE}
 .key_holder.to_add{background-color:#F7F7F7;border:1px dashed #CCCCCC;border-radius:2px}
 .key_holder.to_add .key_holder{border-color:#F7F7F7}
+/*.key_holder > div:last-child{margin-bottom: 0}*/
 .key_holder.to_add .key_holder .line:before,.key_holder.to_add .key_holder .line:after{background-color:#F7F7F7}
 
 .key_row{margin:6px 0;position:relative;white-space: nowrap;}
@@ -76,6 +77,7 @@ h1{font-size:1.5em}
 .objtxt:empty:before{content:"Key";color:#B3B3B3}
 .objtxt.invalid{border:1px solid #b22;box-shadow: 0 0 5px rgba(187, 34, 34, 0.5)}
 .objtxt.invalid:before{content:"\f071";font-family: FontAwesome;position: absolute;right: 100%;top: 0;margin-right: 5px;color: #DAA520;text-shadow: 1px 1px 1px #fff}
+.objtxt:hover,.objval:hover{border-color: #a9a9a9}
 
 .add_obj{position:absolute;bottom:2px;left:14px;height:12px;width:12px;cursor: pointer;text-align: center;color: #909090;background: #EEE;text-shadow: 1px 1px 1px #fff}
 .add_obj:before {content: "\f055";font-family: fontAwesome;font-size: 12px;float: left;}
@@ -115,13 +117,13 @@ h1{font-size:1.5em}
 
 .result{width:100%;padding:8px;border:1px solid #ddd;border-radius:2px;margin-top:8px;resize:none;overflow-x: auto;overflow-y: hidden;white-space: pre}
 
-.new-json {position: absolute;top: 0;right: 0;margin: 8px;z-index: 1;}
+.new-json {position: absolute;top: 0;right: 0;margin: 8px;z-index: 2;}
 .new-json:before {content: "\f005";font-family: FontAwesome;margin-right: 4px;color:#DAA520;}
 
 .cmd-wrap {display: inline-block;vertical-align: top;}
 .dir-ico {display: block;text-align: center;margin: 4px 0;color: #A3A3A3;}
 
-.parse_error {float: right;color: #FFFFFF;font-size: 14px;background: #b22;padding: 1px 4px;border-radius: 2px;}
+.parse_error {float: right;color: #FFFFFF;font-size: 12px;background: #b22;padding: 2px 4px;border-radius: 2px;}
 .parse_error:before {content: "\f071";font-family: FontAwesome;margin-right: 4px;}
 
 .error-line {position: absolute;left: -15px;top: -25px;background:-webkit-linear-gradient(#909090,#5a5a5a);border:1px solid #616161;color:#fff;font-size:12px;padding:0 6px;height:20px;line-height:18px;font-family:monospace;border-radius:2px;cursor:default}

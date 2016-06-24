@@ -20,17 +20,14 @@ $(function(){
 		message:"Make your JSON while having your Coffee!"
 	}
 	json = app.json;
-	json.makeJSON({name : "yogesh"});
+	json.makeJSON(jObj);
 	$(".stringify").click(function(){
-		var json = makeStringify();
-		if(json){
-			var rows = json.split(String.fromCharCode(10)).length,
-			top = $(".result_pad").offset().top;//'e{offsetTop}'
+		showResult();
+		var top = $(".result_pad").offset().top;
+		$("html,body").animate({scrollTop : top});
+	});
 
-			$(".result").removeClass("hide").val(json).attr("rows", rows);
-			$("html,body").animate({scrollTop : top});
-		}
-	}).get(0).click();
+	showResult();
 
 	$(".objectify").click(function(){
 		try{
@@ -157,5 +154,13 @@ $(function(){
 			}
 		}
 		return json;
+	}
+
+	function showResult(){
+		var json = makeStringify();
+		if(json){
+			var rows = json.split(String.fromCharCode(10)).length;
+			$(".result").removeClass("hide").val(json).attr("rows", rows);
+		}
 	}
 });
