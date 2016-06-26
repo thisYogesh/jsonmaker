@@ -1,13 +1,11 @@
 <i class="error-line">This key is number not string</i>
-<ul class="option_tray">
-	<li class="op_item">
-		<span class="ops remove_obj" title="Remove"></span>
-	</li><li class="op_item">
-  		<span class="ops reset_obj" title="Reset"></span>
-	</li><li class="op_item">
-  		<span class="ops clone_obj" title="Clone"></span>
-	</li>
-</ul>
+<div class="option_tray">
+	<ul>
+		<li class="op_item"><span class="ops remove_obj" title="Remove"></span></li>
+		<li class="op_item"><span class="ops reset_obj" title="Reset"></span></li>
+		<li class="op_item"><span class="ops clone_obj" title="Clone"></span></li>
+	</ul>
+</div>
 
 BG : #D4D7FE 
 BR : #9AA0E8
