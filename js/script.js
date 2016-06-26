@@ -4,17 +4,17 @@ $(function(){
 	var jObj = {
 		project:{
 			name : 'jsonmaker',
-			version : 1.3
+			version : 1.4
 		},
 		developer:{
 			name:{
 				firstName:'Yogesh',
 				lastName:'Jagdale'
 			},
-			age:24,
+			age:25,
 			hobies:[
 				"Reading",
-				"<h1>Programming</h1>"
+				"Programming"
 			]
 		},
 		message:"Make your JSON while having your Coffee!"
@@ -68,7 +68,7 @@ $(function(){
 				updateRows(this);
 			}
 		}else if(e.type == "keyup"){
-			if(e.keyCode == 8){ // backspace
+			if(e.keyCode == 8 || e.keyCode == 13){ // backspace
 				updateRows(this);
 			}
 			if(e.ctrlKey && e.keyCode == 86){ // Paste
