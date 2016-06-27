@@ -291,7 +291,7 @@ function json_view(json_object){
 			html +=		"<div class='key_row'>" +
 							"<div class='remove'></div>" +
 							"<div class='key'>";
-			html +=				_this.obOption();
+			//html +=				_this.obOption(json_object);
 			html +=				"<span class='objtxt' spellcheck='false' contenteditable></span>" +
 							"</div>" +
 							"<div class='val nonobj'>";
@@ -302,6 +302,7 @@ function json_view(json_object){
 			html +=		"<div class='key_row'>" +
 							"<div class='remove'></div>" +
 							"<div class='val nonobj'>";
+			//html +=				_this.obOption(json_object);
 		}
 	}
 	
@@ -311,6 +312,7 @@ function json_view(json_object){
 		html += 					_this.json_init(json_object);
 		html += 				"</div>";
 	}else if(is_number || is_string || is_boolean){
+		//html += (json_object.parent.parent.type == "Array" ? _this.obOption(json_object) : "");
 		if(is_number){
 			html += 			"<span class='objval num' spellcheck='false' contenteditable></span>";
 		}else if(is_string){
@@ -365,8 +367,13 @@ function json_view(json_object){
 		}else if(is_boolean){
 			_this.html = $(html).click(function(e){
 				_this.setBoolVal.bind(this)(e, _this);
-			}).data("value", 1).get(0);
+			}).data("value", 1).get(0);	
 			$(_this.html).click();
+		}
+		if(json_object.parent.parent.type == "Array"){
+			$(_this.html).mouseenter(function(e){
+				_this.bounceEvent.bind(this)(e, _this.json_object.parent.view);
+			});
 		}
 	}
 
@@ -375,6 +382,8 @@ function json_view(json_object){
 			_this.setKey.bind(this)(e, _this);
 		}).keypress(function(e){
 			if(e.keyCode == 13) e.preventDefault();
+		}).mouseenter(function(e){
+			_this.bounceEvent.bind(this)(e, _this);
 		});
 	}
 	/* append to the parent */
@@ -435,6 +444,26 @@ json_view.ext = function(methods){
 };
 
 json_view.ext({
+	bounceEvent : function(e, _this){
+		$(this).unbind("mouseenter mouseleave").parent().bind("mouseenter mouseleave",function(e){
+			_this.showAdvOpt(e, _this);
+		})
+	},
+	showAdvOpt : function(e, _this){
+		var el = $(_this.html),
+		ob_type = _this.json_object.parent.type == "Array" ? "val >.json_block" : "key";
+		//console.log(_this);
+		if(e.type == "mouseenter"){
+			var html = _this.obOption(_this.json_object);
+			if( el.find(">."+ ob_type +">.option_tray").length == 0 ){
+				el.find(">."+ ob_type).prepend(html).find(">.option_tray").show(0).find(">ul").animate({left:0}, 100);
+			}else{
+				el.find(">."+ ob_type +">.option_tray").show(0).find(">ul").animate({left:0}, 100);
+			}
+		}else if(e.type == "mouseleave"){
+			el.find(">."+ ob_type +">.option_tray>ul").animate({left:'-100%'}, 100, function(){ $(this).parent().hide(0) });
+		}
+	},
 	triggerClick : function(e, _this){
 		if(e.keyCode == 13){
 			this.click();
@@ -465,7 +494,7 @@ json_view.ext({
 		}
 		return html;
 	},
-	obOption : function(){
+	obOption : function(json_object){
 		var option_tray = 	"<div class='option_tray'>" +
 								"<ul>" +
 									"<li class='op_item'>" +
