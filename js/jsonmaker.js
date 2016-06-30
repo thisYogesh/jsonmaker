@@ -291,7 +291,6 @@ function json_view(json_object){
 			html +=		"<div class='key_row'>" +
 							"<div class='remove'></div>" +
 							"<div class='key'>";
-			//html +=				_this.obOption(json_object);
 			html +=				"<span class='objtxt' spellcheck='false' contenteditable></span>" +
 							"</div>" +
 							"<div class='val nonobj'>";
@@ -302,7 +301,6 @@ function json_view(json_object){
 			html +=		"<div class='key_row'>" +
 							"<div class='remove'></div>" +
 							"<div class='val nonobj'>";
-			//html +=				_this.obOption(json_object);
 		}
 	}
 	
@@ -312,7 +310,6 @@ function json_view(json_object){
 		html += 					_this.json_init(json_object);
 		html += 				"</div>";
 	}else if(is_number || is_string || is_boolean){
-		//html += (json_object.parent.parent.type == "Array" ? _this.obOption(json_object) : "");
 		if(is_number){
 			html += 			"<span class='objval num' spellcheck='false' contenteditable></span>";
 		}else if(is_string){
@@ -371,6 +368,7 @@ function json_view(json_object){
 			$(_this.html).click();
 		}
 		if(json_object.parent.parent.type == "Array"){
+			// mouse hover event for String, Number, Boolean values in Array []
 			$(_this.html).mouseenter(function(e){
 				_this.bounceEvent.bind(this)(e, _this.json_object.parent.view);
 			});
@@ -383,6 +381,7 @@ function json_view(json_object){
 		}).keypress(function(e){
 			if(e.keyCode == 13) e.preventDefault();
 		}).mouseenter(function(e){
+			// mouse hover event for String, Number, Boolean values in Object {}
 			_this.bounceEvent.bind(this)(e, _this);
 		});
 	}
@@ -465,9 +464,7 @@ json_view.ext({
 		}
 	},
 	triggerClick : function(e, _this){
-		if(e.keyCode == 13){
-			this.click();
-		}
+		if(e.keyCode == 13)this.click();
 		e.preventDefault();
 	},
 	json_init : function(json_object){
@@ -476,7 +473,7 @@ json_view.ext({
 			  			"<div class='json_op'>";
 		html += 			this.option(json_object);
 		html +=			"</div>" +
-			  		"</div>";
+					"</div>";
 		return html;
 	},
 	option : function(json_object){

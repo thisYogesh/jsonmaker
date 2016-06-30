@@ -1,0 +1,29 @@
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+}
+#filelist {
+    list-style: none;
+    font-size: 14px;
+}
+
+#filelist > li {
+    display: inline-block;
+    width: 20%;
+    word-break: break-all;
+    vertical-align: top;
+    padding: 6px;
+}
+
+.fileWrap {
+    height: 100px;
+    padding: 6px;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+}
