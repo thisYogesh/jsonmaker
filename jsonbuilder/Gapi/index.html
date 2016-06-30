@@ -1,0 +1,115 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="text/javascript" src="jquery-3.0.0.min.js"></script>
+    <script type="text/javascript">
+      // Your Client ID can be retrieved from your project in the Google
+      // Developer Console, https://console.developers.google.com
+      var GDA = {
+          "web": {
+              "client_id": "1020136838835-grovjgq7o8lt2jrr4cdg3oc6eu7gld50.apps.googleusercontent.com",
+              "project_id": "cellular-fold-135823",
+              "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+              "token_uri": "https://accounts.google.com/o/oauth2/token",
+              "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+              "client_secret": "9GP1jb0N1GMOyo4wCJLksZ8c",
+              "redirect_uris": ["http://localhost"],
+              "javascript_origins": ["http://localhost"]
+          }
+      },
+      CLIENT_ID = GDA.web.client_id,
+      SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly'];
+
+      /**
+       * Check if current user has authorized this application.
+       */
+      function checkAuth() {
+        gapi.auth.authorize(
+          {
+            'client_id': CLIENT_ID,
+            'scope': SCOPES.join(' '),
+            'immediate': true
+          }, handleAuthResult);
+      }
+
+      /**
+       * Handle response from authorization server.
+       *
+       * @param {Object} authResult Authorization result.
+       */
+      function handleAuthResult(authResult) {
+        var authorizeDiv = document.getElementById('authorize-div');
+        if (authResult && !authResult.error) {
+          // Hide auth UI, then load client library.
+          authorizeDiv.style.display = 'none';
+          loadDriveApi();
+        } else {
+          // Show auth UI, allowing the user to initiate authorization by
+          // clicking authorize button.
+          authorizeDiv.style.display = 'inline';
+        }
+      }
+
+      /**
+       * Initiate auth flow in response to user clicking authorize button.
+       *
+       * @param {Event} event Button click event.
+       */
+      function handleAuthClick(event) {
+        gapi.auth.authorize(
+          {client_id: CLIENT_ID, scope: SCOPES, immediate: false},
+          handleAuthResult);
+        return false;
+      }
+
+      /**
+       * Load Drive API client library.
+       */
+      function loadDriveApi() {
+        gapi.client.load('drive', 'v3', listFiles);
+      }
+
+      /**
+       * Print files.
+       */
+      function listFiles() {
+        var request = gapi.client.drive.files.list({
+            'pageSize': 10,
+            'fields': "nextPageToken, files(id, name)"
+          });
+
+          request.execute(function(resp) {
+            //$("#filelist").append('Files:');
+            var files = resp.files;
+            if (files && files.length > 0) {
+              for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                //file.name,file.id
+                var li =    "<li>" +
+                                "<div class='fileWrap'>" +
+                                    file.name
+                                "</div>" +
+                            "</li>";
+                $("#filelist").append(li);
+              }
+            } else {
+              $("#filelist").append('No files found.');
+            }
+          });
+      }
+
+    </script>
+    <script src="https://apis.google.com/js/client.js?onload=checkAuth">
+    </script>
+  </head>
+  <body>
+    <div id="authorize-div" style="display: none">
+      <span>Authorize access to Drive API</span>
+      <!--Button for the user to click to initiate auth sequence -->
+      <button id="authorize-button" onclick="handleAuthClick(event)">
+        Authorize
+      </button>
+    </div>
+    <ul id="filelist"></pre>
+  </body>
+</html>
