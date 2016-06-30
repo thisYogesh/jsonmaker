@@ -88,7 +88,10 @@
                 //file.name,file.id
                 var li =    "<li>" +
                                 "<div class='fileWrap'>" +
-                                    file.name
+                                    "<i class='fa fa-file-text-o'></i>" +
+                                    "<span class='filename'>" +
+                                      file.name +
+                                    "</span>" +
                                 "</div>" +
                             "</li>";
                 $("#filelist").append(li);
