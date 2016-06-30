@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     border: 0;
+    font-family: sans-serif;
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -11,8 +12,9 @@
 #filelist {
     list-style: none;
     font-size: 14px;
+    max-width: 665px;
+    margin: 0 auto;
 }
-
 #filelist > li {
     display: inline-block;
     width: 20%;
@@ -20,10 +22,30 @@
     vertical-align: top;
     padding: 6px;
 }
-
 .fileWrap {
     height: 100px;
     padding: 6px;
     border: 1px solid #ddd;
     border-radius: 2px;
+    text-align: center;
+    position: relative;
+}
+.fileWrap .fa {
+    font-size: 42px;
+    display: block;
+    margin-top: 10px;
+}
+.filename {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 0 6px;
+    width: 100%;
+    height: 25px;
+    line-height: 25px;
+    background-color: #ddd;
 }
