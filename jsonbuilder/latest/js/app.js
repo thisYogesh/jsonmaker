@@ -14,7 +14,3 @@ json_builder_app.prototype.createJsonBuilder = function(){
 		parent_el : this.jsonEditor
 	});
 }
-
-isNum = function(val){
-	return !isNaN(val);
-}

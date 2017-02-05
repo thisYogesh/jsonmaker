@@ -108,7 +108,7 @@ $(function(){
 			}
 		});
 		if(validate){
-			$(".sendmsg").text("SENDING..");
+			$(".sendmsg").text("SENDING");
 			$.ajax({
 			    url : 'http://localhost:8080/contactus',
 			    type : 'POST',
