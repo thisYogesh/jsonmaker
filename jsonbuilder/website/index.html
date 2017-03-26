@@ -20,8 +20,8 @@
 	<script type="text/javascript" src="js/jsonbuilder.js"></script>
 	<script type="text/javascript" src="js/app.js"></script>
 	<script type="text/javascript" src="js/script.js"></script>
-<style type="text/css">
-	/*
+	<style type="text/css">
+		/*
 	@media only screen and (-webkit-min-device-pixel-ratio:0){
 	    div{
 			color:#fff
@@ -33,110 +33,113 @@
 		}
 	}
 	*/
-</style>
+	</style>
 </head>
 
 <body>
 	<div id="fb-root"></div>
-<div class="container top-header">
-	<h1 class="main-title">
-		<a class="logo"></a>
-		<span class="lgsl">{JSON : Maker}</span>
-	</h1>
-</div>
-<section class="container jsoneditor">
-	<p class="info">
-		JSON (JavaScript Object Notation) is a lightweight data-interchange format. It is easy for humans to read and write. It is
-		easy for machines to parse and generate. It is based on a subset of the JavaScript Programming Language, Standard ECMA-262
-		3rd Edition - December 1999.
-		<br><br> JSON is a text format that is completely language independent but uses conventions that are familiar to programmers
-		of the C-family of languages, including C, C++, C#, Java, JavaScript, Perl, Python, and many others. These properties make
-		JSON an ideal data-interchange language.
-		<span class="ref">Referred from : http://www.json.org</span>
-	</p>
-	<div id="jsonEditor">
-		<button class="cmd new-json">Create New JSON</button>
-	</div>
-
-	<div class="cmd-btn">
-		<div class="cmd-wrap">
-			<span class="dir-ico fa fa-long-arrow-down"></span>
-			<button class="cmd stringify">JSON to Stringify</button>
-			<span class="dir-ico fa fa-long-arrow-down"></span>
-		</div>
-		<div class="cmd-wrap">
-			<span class="dir-ico fa fa-long-arrow-up"></span>
-			<button class="cmd objectify">Stringify to JSON</button>
-			<span class="dir-ico fa fa-long-arrow-up"></span>
-		</div>
-		<div class="cmd-wrap">
-			<span class="dir-ico fa fa-long-arrow-down"></span>
-			<button class="cmd log">&gt;_ Log to your console</button>
+	<div class="container top-header">
+		<h1 class="main-title">
+			<a class="logo"></a>
+			<span class="lgsl">{JSON : Maker}</span>
+		</h1>
+		<div class="changeview">Change View
+			<span class="view-icon"></span>
 		</div>
 	</div>
-
-	<div class="_block result_pad">
-		<span class="tl">JSON Stringify</span>
-		<span class="parse_error hide"></span>
-		<div class="text-area-wrap">
-			<div class="line-number-group">
-				<!--span class="line-number">1</span-->
-			</div>
-			<textarea spellcheck="false" class="result"></textarea>
-		</div>
-		<p class="tip">
-			<span class="t-point">Create JSON and click on 'JSON to Stringify' button. </span>
-			<span class="t-point">Paste/Write JSON string in the above textbox and click on 'Stringify to JSON' button</span>
+	<section class="container jsoneditor">
+		<p class="info hide">
+			JSON (JavaScript Object Notation) is a lightweight data-interchange format. It is easy for humans to read and write. It is
+			easy for machines to parse and generate. It is based on a subset of the JavaScript Programming Language, Standard ECMA-262
+			3rd Edition - December 1999.
+			<br><br> JSON is a text format that is completely language independent but uses conventions that are familiar to programmers
+			of the C-family of languages, including C, C++, C#, Java, JavaScript, Perl, Python, and many others. These properties
+			make JSON an ideal data-interchange language.
+			<span class="ref">Referred from : http://www.json.org</span>
 		</p>
-	</div>
-	<div class="fb_like">
-		<div class="fb-like" data-href="http://www.jsonmaker.com" data-layout="standard" data-action="like" data-show-faces="true"
-			data-share="true"></div>
-	</div>
-</section>
-<section class="container contactus hide">
-	<h1>Contact
-		<span class="mypk"></span>Yogesh
-		<a class="linkedin" target="_blank" href="https://www.linkedin.com/in/YogeshJagdale">https://www.linkedin.com/in/YogeshJagdale</a>
-	</h1>
-	<div class="_block">
-		<form class="myform" method="post" action="http://localhost:8080/contactus">
-			<div class="row">
-				<label>Name</label><input type="text" class="inp" name="name" placeholder="Type Your Name">
+		<div id="jsonEditor">
+			<button class="cmd new-json">Create New JSON</button>
+		</div>
+
+		<div class="cmd-btn">
+			<div class="cmd-wrap">
+				<span class="dir-ico fa fa-long-arrow-down"></span>
+				<button class="cmd stringify">JSON to Stringify</button>
+				<span class="dir-ico fa fa-long-arrow-down"></span>
 			</div>
-			<div class="row">
-				<label>Email</label><input type="text" class="inp" name="email" placeholder="Type Your Email">
+			<div class="cmd-wrap">
+				<span class="dir-ico fa fa-long-arrow-up"></span>
+				<button class="cmd objectify">Stringify to JSON</button>
+				<span class="dir-ico fa fa-long-arrow-up"></span>
 			</div>
-			<div class="row">
-				<label>Profession</label><select class="inp" name="profession">
+			<div class="cmd-wrap">
+				<span class="dir-ico fa fa-long-arrow-down"></span>
+				<button class="cmd log">&gt;_ Log to your console</button>
+			</div>
+		</div>
+
+		<div class="_block result_pad">
+			<span class="tl">JSON Stringify</span>
+			<span class="parse_error hide"></span>
+			<div class="text-area-wrap">
+				<div class="line-number-group">
+					<!--span class="line-number">1</span-->
+				</div>
+				<textarea spellcheck="false" class="result"></textarea>
+			</div>
+			<p class="tip">
+				<span class="t-point">Create JSON and click on 'JSON to Stringify' button. </span>
+				<span class="t-point">Paste/Write JSON string in the above textbox and click on 'Stringify to JSON' button</span>
+			</p>
+		</div>
+		<div class="fb_like">
+			<div class="fb-like" data-href="http://www.jsonmaker.com" data-layout="standard" data-action="like" data-show-faces="true"
+			 data-share="true"></div>
+		</div>
+	</section>
+	<section class="container contactus hide">
+		<h1>Contact
+			<span class="mypk"></span>Yogesh
+			<a class="linkedin" target="_blank" href="https://www.linkedin.com/in/YogeshJagdale">https://www.linkedin.com/in/YogeshJagdale</a>
+		</h1>
+		<div class="_block">
+			<form class="myform" method="post" action="http://localhost:8080/contactus">
+				<div class="row">
+					<label>Name</label><input type="text" class="inp" name="name" placeholder="Type Your Name">
+				</div>
+				<div class="row">
+					<label>Email</label><input type="text" class="inp" name="email" placeholder="Type Your Email">
+				</div>
+				<div class="row">
+					<label>Profession</label><select class="inp" name="profession">
 						<option value="">Select your profession</option>
 						<option value="IT">IT</option>
 						<option value="HR">HR</option>
 						<option value="Other">Other</option>
 					</select>
-			</div>
-			<div class="row">
-				<label>Reason</label><textarea class="inp" name="reason" placeholder="Type Your Reason"></textarea>
-			</div>
-			<div class="row">
-				<label></label><button class="sendmsg">SEND</button>
-			</div>
-			<div class="row hide err-msg">
-				<label></label><span class="errm">Hey! Sorry, There might be some issue in backend, Please try again!</span>
-			</div>
-		</form>
-	</div>
-</section>
-<section class="foot">
-	<div class="container">
-		<footer class="footer">
-			<div class="auth_info">
-				Developed By <a class="aname" href="mailto:yog99mail@gmail.com">Yogesh Jagdale</a>
-				<span class="em">Copyright &copy; 2016 jsonmaker.com. All rights reserved.</span>
-			</div>
-		</footer>
-	</div>
-</section>
+				</div>
+				<div class="row">
+					<label>Reason</label><textarea class="inp" name="reason" placeholder="Type Your Reason"></textarea>
+				</div>
+				<div class="row">
+					<label></label><button class="sendmsg">SEND</button>
+				</div>
+				<div class="row hide err-msg">
+					<label></label><span class="errm">Hey! Sorry, There might be some issue in backend, Please try again!</span>
+				</div>
+			</form>
+		</div>
+	</section>
+	<section class="foot">
+		<div class="container">
+			<footer class="footer">
+				<div class="auth_info">
+					Developed By <a class="aname" href="mailto:yog99mail@gmail.com">Yogesh Jagdale</a>
+					<span class="em">Copyright &copy; 2016 jsonmaker.com. All rights reserved.</span>
+				</div>
+			</footer>
+		</div>
+	</section>
 </body>
 
 </html>
