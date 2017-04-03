@@ -367,7 +367,9 @@
 			if (!is_boolean) {
 				_this.html = $(html).blur(function (e) {
 					_this.setVal.bind(this)(e, _this);
-				}).keypress(function () { }).get(0);
+				}).keypress(function (e) { 
+					if (e.keyCode == 13) e.preventDefault();
+				}).get(0);
 			} else if (is_boolean) {
 				_this.html = $(html).click(function (e) {
 					_this.setBoolVal.bind(this)(e, _this);
