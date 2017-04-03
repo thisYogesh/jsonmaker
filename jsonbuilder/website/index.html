@@ -47,7 +47,7 @@
 			<span class="view-icon"></span>
 		</div>
 	</div>
-	<section class="container jsoneditor">
+	<section class="container jsoneditor-container">
 		<p class="info hide">
 			JSON (JavaScript Object Notation) is a lightweight data-interchange format. It is easy for humans to read and write. It is
 			easy for machines to parse and generate. It is based on a subset of the JavaScript Programming Language, Standard ECMA-262
@@ -59,26 +59,25 @@
 		</p>
 		<div id="jsonEditor">
 			<button class="cmd new-json">Create New JSON</button>
-		</div>
-
-		<div class="cmd-btn">
+		</div><div class="cmd-btn">
 			<div class="cmd-wrap">
 				<span class="dir-ico fa fa-long-arrow-down"></span>
+				<span class="dir-ico fa fa-long-arrow-right"></span>
 				<button class="cmd stringify">JSON to Stringify</button>
 				<span class="dir-ico fa fa-long-arrow-down"></span>
+				<span class="dir-ico fa fa-long-arrow-right"></span>
 			</div>
 			<div class="cmd-wrap">
 				<span class="dir-ico fa fa-long-arrow-up"></span>
+				<span class="dir-ico fa fa-long-arrow-left"></span>
 				<button class="cmd objectify">Stringify to JSON</button>
 				<span class="dir-ico fa fa-long-arrow-up"></span>
+				<span class="dir-ico fa fa-long-arrow-left"></span>
 			</div>
 			<div class="cmd-wrap">
-				<span class="dir-ico fa fa-long-arrow-down"></span>
-				<button class="cmd log">&gt;_ Log to your console</button>
+				<button class="cmd log">&gt;_ Log to console</button>
 			</div>
-		</div>
-
-		<div class="_block result_pad">
+		</div><div class="_block result_pad">
 			<span class="tl">JSON Stringify</span>
 			<span class="parse_error hide"></span>
 			<div class="text-area-wrap">

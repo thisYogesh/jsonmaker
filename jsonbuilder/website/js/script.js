@@ -49,7 +49,6 @@ $(function () {
 		}
 	});
 
-
 	$(".log").click(function () {
 		var json = makeStringify();
 		if (json && console) {
@@ -132,6 +131,31 @@ $(function () {
 			});
 		}
 		e.preventDefault();
+	});
+
+	var view = 0,minHeight = 260;
+	$(".changeview").click(function(e){
+		if(!view){
+			var h = window.innerHeight - ($('.top-header').outerHeight() + 16 + $('.foot').outerHeight() + 16);
+			view = 1;
+			$(document.body)
+			.addClass("horizontalView")
+			.find(".jsoneditor-container")
+			.css("height", h < minHeight ? minHeight : h);
+		}else{
+			view = 0;
+			$(document.body)
+			.removeClass("horizontalView")
+			.find(".jsoneditor-container")
+			.css("height","auto");
+		}
+	});
+
+	$(window).resize(function(e){
+		if(view){
+			var h = window.innerHeight - ($('.top-header').outerHeight() + 16 + $('.foot').outerHeight() + 16);
+			$(".jsoneditor-container").css("height", h < minHeight ? minHeight : h);
+		}
 	});
 
 	var errTm;
