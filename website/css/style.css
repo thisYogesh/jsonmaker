@@ -170,7 +170,7 @@ textarea.inp {height: 100px}
 .errm {border: 1px solid #b22;display: inline-block;width: 375px;font-size: 14px;padding: 4px;background-color: rgba(187, 34, 34, 0.54);color: #fff;border-radius: 2px;text-shadow: 0 1px 0px #b22}
 
 /* texteditor css */
-.text-area-wrap {background-color: #fff;border: 1px solid #ddd;padding: 8px 8px 8px 35px;margin-top: 8px;position: relative;line-height: 20px}
+.text-area-wrap {background-color: #fff;border: 1px solid #ddd;padding: 8px 8px 8px 15px;margin-top: 8px;position: relative;line-height: 20px}
 .line-number-group {position: absolute;top: 0;left:0;width: 100%;line-height: inherit;padding-top: 8px}
 .line-number-group .line-number {display: block;padding-left: 6px}
 .line-number:nth-child(2n + 1) {background-color: #fafafa}

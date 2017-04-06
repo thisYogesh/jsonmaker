@@ -187,6 +187,7 @@ $(function () {
 	}
 
 	function editorLineNumbers(lineCount, type) {
+		//return;
 		var lines = [],
 			gLines = lineGenerator(lineCount);
 
@@ -194,7 +195,8 @@ $(function () {
 
 		function lineGenerator(length) {
 			for (var i = 1; i <= length; i++) {
-				lines.push('<span class="line-number">' + i + '</span>');
+				//lines.push('<span class="line-number">' + i + '</span>');
+				lines.push('<span class="line-number">&nbsp;</span>');
 			}
 			return lines.join("");
 		}
