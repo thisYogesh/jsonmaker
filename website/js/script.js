@@ -5,14 +5,14 @@ $(function () {
 		jObj = {
 			project: {
 				name: 'jsonmaker',
-				version: 1.4
+				version: 2.0
 			},
 			developer: {
 				name: {
 					firstName: 'Yogesh',
 					lastName: 'Jagdale'
 				},
-				age: 25,
+				age: 26,
 				hobies: [
 					"Reading",
 					"Programming"
