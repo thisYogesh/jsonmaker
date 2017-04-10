@@ -20,15 +20,20 @@ $(function () {
 			},
 			message: "Make your JSON while having your Coffee!"
 		},
+		view = 0, // default view
 		editorStyle = window.getComputedStyle($(".text-area-wrap").get(0)),
 		editor = $(".result"),
-		json = app.json;
+		json = app.json,
+		operations = {
+			createNewJson : "Create New Json",
+			loadExample : "Load Example"
+		};
 
 	json.makeJSON(jObj);
 	$(".stringify").click(function () {
 		showResult();
 		var top = $(".result_pad").offset().top;
-		$("html,body").animate({ scrollTop: top });
+		scrollTop(top);
 	});
 
 	showResult();
@@ -40,12 +45,12 @@ $(function () {
 				top = $("#jsonEditor").offset().top;
 			$(".parse_error").addClass("hide");
 			json.makeJSON(json_obj);
-			$("html,body").animate({ scrollTop: top - 10 });
+			scrollTop(top - 10);
 		} catch (e) {
 			var msg = "Error : " + e.message,
 				top = $(".result_pad").offset().top;
 			$(".parse_error").removeClass("hide").html(msg);
-			$("html,body").animate({ scrollTop: top });
+			scrollTop(top);
 		}
 	});
 
@@ -60,10 +65,37 @@ $(function () {
 		}
 	});
 
-	$(".new-json").click(function () {
+	/*$(".new-json").click(function () {
 		json.reset();
 		$(".result").val("").attr("rows", 1);
 		updateEditor("update");
+	});*/
+
+	$(".option-list").click(function(e){
+		var _this = $(this);
+		if(!_this.data("open")){
+			_this.data("open", 1).find(".option-menu").slideDown(100);
+		}else{
+			_this.data("open", 0).find(".option-menu").slideUp(100);
+		}
+		e.stopPropagation();
+	}).data("open",0).find(".option-menu").hide(0);
+
+	$(window).click(function(){
+		$(".option-list").data("open",0).find(".option-menu").hide(0);
+	});
+
+	$(".option-list .option-menu>li").click(function(){
+		var _this = $(this);
+		
+		if(_this.data("value") == operations.createNewJson){
+			json.reset();
+			$(".result").val("").attr("rows", 1);
+			updateEditor("update");
+		}else if(_this.data("value" == operations.loadExample)){
+			json.makeJSON(jObj);
+			showResult();
+		}
 	});
 
 	$(".result").bind("keypress keydown keyup", function (e) {
@@ -133,7 +165,7 @@ $(function () {
 		e.preventDefault();
 	});
 
-	var view = 0,minHeight = 260;
+	var minHeight = 260;
 	$(".changeview").click(function(e){
 		if(!view){
 			var h = window.innerHeight - ($('.top-header').outerHeight() + 16 + $('.foot').outerHeight() + 16);
@@ -217,6 +249,12 @@ $(function () {
 		var json = makeStringify();
 		if (json) {
 			updateEditor("put", json);
+		}
+	}
+
+	function scrollTop(a){
+		if(view == 0){
+			$("html,body").animate({ scrollTop: a });
 		}
 	}
 });
