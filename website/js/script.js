@@ -25,8 +25,8 @@ $(function () {
 		editor = $(".result"),
 		json = app.json,
 		operations = {
-			createNewJson : "Create New Json",
-			loadExample : "Load Example"
+			createNewJson: "Create New Json",
+			loadExample: "Load Example"
 		};
 
 	json.makeJSON(jObj);
@@ -71,28 +71,28 @@ $(function () {
 		updateEditor("update");
 	});*/
 
-	$(".option-list").click(function(e){
+	$(".option-list").click(function (e) {
 		var _this = $(this);
-		if(!_this.data("open")){
+		if (!_this.data("open")) {
 			_this.data("open", 1).find(".option-menu").slideDown(100);
-		}else{
+		} else {
 			_this.data("open", 0).find(".option-menu").slideUp(100);
 		}
 		e.stopPropagation();
-	}).data("open",0).find(".option-menu").hide(0);
+	}).data("open", 0).find(".option-menu").hide(0);
 
-	$(window).click(function(){
-		$(".option-list").data("open",0).find(".option-menu").hide(0);
+	$(window).click(function () {
+		$(".option-list").data("open", 0).find(".option-menu").hide(0);
 	});
 
-	$(".option-list .option-menu>li").click(function(){
+	$(".option-list .option-menu>li").click(function () {
 		var _this = $(this);
-		
-		if(_this.data("value") == operations.createNewJson){
+
+		if (_this.data("value") == operations.createNewJson) {
 			json.reset();
 			$(".result").val("").attr("rows", 1);
-			updateEditor("update");
-		}else if(_this.data("value" == operations.loadExample)){
+			updateEditor({ type: "update" });
+		} else if (_this.data("value" == operations.loadExample)) {
 			json.makeJSON(jObj);
 			showResult();
 		}
@@ -101,14 +101,14 @@ $(function () {
 	$(".result").bind("keypress keydown keyup", function (e) {
 		if (e.type == "keypress") {
 			if (e.keyCode == 13) { // enter
-				updateEditor("update");
+				updateEditor({ type: "update", event: e });
 			}
 		} else if (e.type == "keyup") {
 			if (e.keyCode == 8 || e.keyCode == 13) { // backspace
-				updateEditor("update");
+				updateEditor({ type: "update" });
 			}
 			if (e.ctrlKey && e.keyCode == 86) { // Paste
-				updateEditor("update");
+				updateEditor({ type: "update" });
 			}
 		} else if (e.type == "keydown") {
 			if (e.keyCode == 9) { // tab
@@ -166,25 +166,25 @@ $(function () {
 	});
 
 	var minHeight = 260;
-	$(".changeview").click(function(e){
-		if(!view){
+	$(".changeview").click(function (e) {
+		if (!view) {
 			var h = window.innerHeight - ($('.top-header').outerHeight() + 16 + $('.foot').outerHeight() + 16);
 			view = 1;
 			$(document.body)
-			.addClass("horizontalView")
-			.find(".jsoneditor-container")
-			.css("height", h < minHeight ? minHeight : h);
-		}else{
+				.addClass("horizontalView")
+				.find(".jsoneditor-container")
+				.css("height", h < minHeight ? minHeight : h);
+		} else {
 			view = 0;
 			$(document.body)
-			.removeClass("horizontalView")
-			.find(".jsoneditor-container")
-			.css("height","auto");
+				.removeClass("horizontalView")
+				.find(".jsoneditor-container")
+				.css("height", "auto");
 		}
 	});
 
-	$(window).resize(function(e){
-		if(view){
+	$(window).resize(function (e) {
+		if (view) {
 			var h = window.innerHeight - ($('.top-header').outerHeight() + 16 + $('.foot').outerHeight() + 16);
 			$(".jsoneditor-container").css("height", h < minHeight ? minHeight : h);
 		}
@@ -200,15 +200,26 @@ $(function () {
 		}.bind(), 5000);
 	}
 
-	function updateEditor(type, val) {
+	/*
+	 * Update Editor 
+	 * @param {String} a.type
+	 * @param {String} a.val
+	 * @param {Object} a.event
+	 * 
+	 * @return {undefined}
+	 */
+
+	function updateEditor(a) {
 		var lHeight = parseInt(editorStyle.lineHeight),
-			rows = editor.val().split(String.fromCharCode(10)).length,
+			isEnterKeyPress = a.event ? (a.event.type == "keypress" && a.event.keyCode == 13 ? true : false) : false,
+			rows = editor.val().split("\n").length,
+			rows = isEnterKeyPress ? rows += 1 : rows,
 			height;
 
-		if (type == "put") {
-			rows = val.split(String.fromCharCode(10)).length;
-			editor.removeClass("hide").val(val);//.css("height", height);
-		} else if ("update") {
+		if (a.type == "put") {
+			rows = a.val.split("\n").length;
+			editor.removeClass("hide").val(a.val);//.css("height", height);
+		} else if (a.type == "update") {
 			//_this.removeClass("hide").val(val).css("height", height);
 		}
 		//_this.attr("rows", rows);
@@ -248,12 +259,15 @@ $(function () {
 	function showResult() {
 		var json = makeStringify();
 		if (json) {
-			updateEditor("put", json);
+			updateEditor({
+				type: "put",
+				val: json
+			});
 		}
 	}
 
-	function scrollTop(a){
-		if(view == 0){
+	function scrollTop(a) {
+		if (view == 0) {
 			$("html,body").animate({ scrollTop: a });
 		}
 	}
