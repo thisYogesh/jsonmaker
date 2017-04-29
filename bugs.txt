@@ -1,2 +1,0 @@
-1. if key is number then 
-2. if key has has dash(-) in it
