@@ -183,6 +183,10 @@ $(function () {
 		}
 	});
 
+	$(".play-game").click(function(){
+		window.open("https://thisyogesh.github.io/snake");
+	});
+
 	$(window).resize(function (e) {
 		if (view) {
 			var h = window.innerHeight - ($('.top-header').outerHeight() + 16 + $('.foot').outerHeight() + 16);
