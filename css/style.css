@@ -69,7 +69,7 @@ h1{font-size:1.5em}
 .val.obj:after{content:""}
 .val.obj >.iobj:after{content:"},";letter-spacing:-2px;font-size:16px}
 .val.obj >.iarr:after{content:"],";letter-spacing:-2px;font-size:16px}
-.val.nonobj > .json_block{display:inline}
+.val.nonobj > .json_block{display:inline-block;vertical-align:middle}
 
 .objtxt{border:1px solid #ddd;min-width:10px;border-radius:2px;vertical-align:middle;padding:2px;font-size:0.8em;background-color: #fff;color:#881391}
 .objtxt[contenteditable]{display:inline-block;position:relative;z-index:1}
