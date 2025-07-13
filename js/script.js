@@ -34,6 +34,7 @@ $(function () {
 		showResult();
 		var top = $(".result_pad").offset().top;
 		scrollTop(top);
+		makeDownloadUrl()
 	});
 
 	showResult();
@@ -268,6 +269,14 @@ $(function () {
 				val: json
 			});
 		}
+	}
+
+	function makeDownloadUrl() {
+		const jsonData = $(".result").get(0).value
+		const blob = new Blob([jsonData], { type: "application/json" });
+		const href = URL.createObjectURL(blob);
+
+		$(".download__btn").get(0).href = href
 	}
 
 	function scrollTop(a) {
