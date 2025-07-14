@@ -172,14 +172,16 @@ $(function () {
 			var h = window.innerHeight - ($('.top-header').outerHeight() + 16 + $('.foot').outerHeight() + 16);
 			view = 1;
 			$(document.body)
-				.removeClass("flex-col")
+				.addClass("horizontalView")
 				.find(".jsoneditor-container")
+				.removeClass("flex-col")
 				.css("height", h < minHeight ? minHeight : h);
 		} else {
 			view = 0;
 			$(document.body)
-				.addClass("flex-col")
+				.removeClass("horizontalView")
 				.find(".jsoneditor-container")
+				.addClass("flex-col")
 				.css("height", "auto");
 		}
 	});
