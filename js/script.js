@@ -172,13 +172,13 @@ $(function () {
 			var h = window.innerHeight - ($('.top-header').outerHeight() + 16 + $('.foot').outerHeight() + 16);
 			view = 1;
 			$(document.body)
-				.addClass("horizontalView")
+				.removeClass("flex-col")
 				.find(".jsoneditor-container")
 				.css("height", h < minHeight ? minHeight : h);
 		} else {
 			view = 0;
 			$(document.body)
-				.removeClass("horizontalView")
+				.addClass("flex-col")
 				.find(".jsoneditor-container")
 				.css("height", "auto");
 		}

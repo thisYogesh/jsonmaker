@@ -9,8 +9,8 @@ html,body{min-height:100%}
 .clearfix{clear:both}
 .clearfix:before,.clearfix:after{content:"";display:table;clear:both}
 
-.container.top-header{margin-bottom:16px}
-.container{width:600px;margin:0 auto}
+.wrap.top-header{margin-bottom:16px}
+.wrap{width:600px;margin:0 auto}
 
 .logo{background:url('../images/logo_shadow.png');width:50px;height:45px;display:inline-block;vertical-align:middle;background-size:40px;background-repeat:no-repeat;background-position:center}
 .top-header{position:relative;padding:10px 6px;background-color:#EEEEEE;border:1px solid #ddd;border-top:0;border-radius:0 0 2px 2px}
