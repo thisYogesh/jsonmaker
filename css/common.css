@@ -58,7 +58,7 @@ html,body{min-height:100%}
 .option-list:before {content:"";background-image:url(../images/kebab-menu.png);background-size:16px;position:absolute;top:0;right:0;height:21px;width:100%;background-repeat:no-repeat;background-position:center 3px;opacity:0.5;cursor:pointer}
 .option-list:hover:before {opacity:1}
 /* horizontal view */
-.horizontalView .container {width:98%}
+.horizontalView .wrap {width:98%}
 .horizontalView #jsonEditor {display:inline-block;vertical-align:middle;width:45%;margin:0;height:100%}
 .horizontalView .result_pad {display:inline-block;vertical-align:middle;width:45%;margin:0;height:100%}
 .horizontalView .cmd-btn {display:inline-block;vertical-align:top;width:10%;padding:0 25px}
