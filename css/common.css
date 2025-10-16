@@ -13,11 +13,11 @@ html,body{min-height:100%}
 .wrap{width:600px;margin:0 auto}
 
 .logo{background:url('../images/logo_shadow.png');width:50px;height:45px;display:inline-block;vertical-align:middle;background-size:40px;background-repeat:no-repeat;background-position:center}
-.top-header{position:relative;padding:10px 6px;background-color:#EEEEEE;border:1px solid #ddd;border-top:0;border-radius:0 0 2px 2px}
+.top-header{position:relative;padding:10px 6px;background-color:#EEEEEE;border:1px solid #ddd;border-top:0;}
 .lgsl{position:absolute;left:50%;top:8px;width:250px;text-align:center;margin-left:-125px;font-size:1em}
 .show{display:block!important}
 .hide{display:none}
-._block{padding:15px;margin:8px 0 15px 0;border:1px solid #ddd;background:#eee;border-radius:2px}
+._block{padding:15px;margin:8px 0 15px 0;border:1px solid #ddd;background:#eee;}
 .em{float:right}
 .auth_info{color:#4F4F4F;font-size:12px}
 .auth_info:after,.auth_info:before{content:"";display:table;clear:both}
@@ -44,7 +44,7 @@ html,body{min-height:100%}
 .cmd-wrap .fa-long-arrow-left{display:none}
 .cmd-wrap .fa-long-arrow-right{display:none}
 
-.cmd{border:1px solid #B7B7B7;border-radius:2px;padding:5px;font-size:12px;background-color:#fff;cursor:pointer}
+.cmd{border:1px solid #B7B7B7;padding:5px;font-size:12px;background-color:#fff;cursor:pointer}
 .cmd:active{background-color:#EEEEEE}
 
 .star-icon:before {content:"\f005";font-family:FontAwesome;margin-right:4px;color:#DAA520}
@@ -81,7 +81,7 @@ html,body{min-height:100%}
 /* horizontal view */
 
 .foot{position:absolute;bottom:0;width:100%}
-.footer{padding:6px;background:#EEE;border:1px solid#ddd;border-radius:2px 2px 0 0}
+.footer{padding:6px;background:#EEE;border:1px solid#ddd;}
 
 .intro-tip {position:absolute;background-color:#881491;color:#fff;line-height:20px;font-size:12px;border:1px solid #6a0871;padding:0 6px;border-radius:2px;cursor:default;direction:rtl}
 .intro-tip.direction-ltr:after {content:"";position:absolute;right:-5px;top:4px;border-width:6px 0 6px 6px;border-style:solid;border-color:transparent #881491}

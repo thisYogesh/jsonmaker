@@ -75,7 +75,7 @@
 </head>
 
 <body>
-	<div class="wrap top-header">
+	<div class="wrap top-header rounded-b-md">
 		<h1 class="main-title">
 			<a class="logo"></a>
 			<span class="lgsl">{JSON : Maker}</span>
@@ -83,7 +83,7 @@
 		<div class="extra-menu"><span class="ex-menu changeview"><i class="fa fa-th-list" aria-hidden="true"></i> Change View</span><i class="sep-menu"></i><span class="ex-menu play-game"><i class="fa fa-gamepad" aria-hidden="true"></i> Play Game</span></div>
 	</div>
 	<section class="wrap jsoneditor-container flex flex-col">
-		<div id="jsonEditor">
+		<div id="jsonEditor rounded-md">
 			<div class="option-list">
 				<ul class="option-menu">
 					<li data-value="Create New Json" class="menu-item star-icon">Create New Json</li>
@@ -97,19 +97,19 @@
 			<div class="cmd-wrap">
 				<span class="dir-ico fa fa-long-arrow-down"></span>
 				<span class="dir-ico fa fa-long-arrow-right"></span>
-				<button class="cmd stringify">JSON to Stringify</button>
+				<button class="cmd rounded-md stringify">JSON to Stringify</button>
 				<span class="dir-ico fa fa-long-arrow-down"></span>
 				<span class="dir-ico fa fa-long-arrow-right"></span>
 			</div>
 			<div class="cmd-wrap">
 				<span class="dir-ico fa fa-long-arrow-up"></span>
 				<span class="dir-ico fa fa-long-arrow-left"></span>
-				<button class="cmd objectify">Stringify to JSON</button>
+				<button class="cmd rounded-md objectify">Stringify to JSON</button>
 				<span class="dir-ico fa fa-long-arrow-up"></span>
 				<span class="dir-ico fa fa-long-arrow-left"></span>
 			</div>
 			<div class="cmd-wrap">
-				<button class="cmd log">&gt;_ Log to console</button>
+				<button class="cmd rounded-md log">&gt;_ Log to console</button>
 			</div>
 			<div id="fb-root">
 				<div class="fb_like">
@@ -119,17 +119,17 @@
 				</div>
 			</div>
 		</div>
-		<div class="_block result_pad">
+		<div class="_block result_pad rounded-md">
 			<span class="tl">JSON Stringify</span>
 			<span class="parse_error hide"></span>
 			<a class="hide download__btn" download="jsonmaker.json">Download .json</a>
-			<div class="text-area-wrap">
+			<div class="text-area-wrap rounded-md">
 				<div class="line-number-group">
 					<!--span class="line-number">1</span-->
 				</div>
 				<textarea name="result" spellcheck="false" class="result"></textarea>
 			</div>
-			<p class="tip">
+			<p class="tip rounded-md">
 				<span class="t-point">Create JSON and click on 'JSON to Stringify' button. </span>
 				<span class="t-point">Paste/Write JSON string in the above textbox and click on 'Stringify to JSON' button</span>
 			</p>
@@ -170,7 +170,7 @@
 	</section>
 	<section class="foot">
 		<div class="wrap">
-			<footer class="footer">
+			<footer class="footer rounded-t-md">
 				<div class="auth_info">
 					Developed By <a class="aname" href="mailto:yog99mail@gmail.com">Yogesh Jagdale</a>
 				</div>
