@@ -278,7 +278,9 @@ $(function () {
 		const blob = new Blob([jsonData], { type: "application/json" });
 		const href = URL.createObjectURL(blob);
 
-		$(".download__btn").get(0).href = href
+		const $downloadBtn = $(".download__btn").get(0)
+		$downloadBtn.classList.remove('hidden')
+		$downloadBtn.href = href
 	}
 
 	function scrollTop(a) {
