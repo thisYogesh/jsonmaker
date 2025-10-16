@@ -62,14 +62,13 @@ html,body{min-height:100%}
 .horizontalView #jsonEditor {display:inline-block;vertical-align:middle;width:45%;margin:0;height:100%}
 .horizontalView .result_pad {display:inline-block;vertical-align:middle;width:45%;margin:0;height:100%}
 .horizontalView .cmd-btn {display:inline-block;vertical-align:top;width:10%;padding:0 25px}
-.horizontalView .cmd:not(.new-json){border:0}
 
 .horizontalView .cmd-wrap .fa-long-arrow-left{display:block}
 .horizontalView .cmd-wrap .fa-long-arrow-right{display:block}
 .horizontalView .cmd-wrap .fa-long-arrow-up{display:none}
 .horizontalView .cmd-wrap .fa-long-arrow-down{display:none}
 .horizontalView .cmd-wrap:first-child{margin-top:0}
-.horizontalView .cmd-wrap{border:1px solid #B7B7B7;border-radius:2px;margin:8px 0;cursor:pointer}
+.horizontalView .cmd-wrap{border:1px solid #B7B7B7;margin:8px 0;cursor:pointer}
 .horizontalView .cmd-wrap:active {background-color:#EEEEEE}
 .horizontalView .cmd-wrap:active .cmd:not(.new-json){background-color:#EEEEEE}
 
