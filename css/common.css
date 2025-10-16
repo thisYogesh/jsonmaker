@@ -27,7 +27,7 @@ html,body{min-height:100%}
 
 .extra-menu {position: absolute;right: 0;bottom: 0;margin: 5px}
 .extra-menu .sep-menu {display: inline-block;width: 1px;background-color: #cacaca;height: 20px;vertical-align: middle;margin: 0 7px}
-.extra-menu .ex-menu {vertical-align: middle;font-size: 11px;cursor: pointer}
+.extra-menu .ex-menu {vertical-align: middle;font-size: 13px;cursor: pointer}
 .extra-menu .ex-menu .fa-gamepad {font-size: 12px}
 .extra-menu .ex-menu .fa-th-list {font-size: 10px}
 
