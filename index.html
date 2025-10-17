@@ -110,8 +110,6 @@
 				<span class="dir-ico fa fa-long-arrow-left"></span>
 			</button>
 
-			<a class="hidden cmd-wrap cmd rounded-md download__btn" download="jsonmaker.json">Download as (.json)</a>
-
 			<button class="cmd-wrap cmd rounded-md log">&gt;_ Log to Console</button>
 
 			<div id="fb-root">
@@ -123,8 +121,11 @@
 			</div>
 		</div>
 		<div class="_block result_pad rounded-md">
-			<span class="tl">JSON Stringify</span>
-			<span class="parse_error hide"></span>
+			<div class="flex items-center justify-between">
+				<span class="tl">JSON Stringify</span>
+				<a class="hidden cmd download__btn rounded-md" download="jsonmaker.json">Download as (.json)</a>
+				<span class="hidden parse_error"></span>
+			</div>
 			<div class="text-area-wrap rounded-md">
 				<div class="line-number-group">
 					<!--span class="line-number">1</span-->

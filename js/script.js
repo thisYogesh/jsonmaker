@@ -34,8 +34,13 @@ $(function () {
 		showResult();
 		var top = $(".result_pad").offset().top;
 		scrollTop(top);
-		makeDownloadUrl()
 	});
+
+	$('.download__btn').get(0).addEventListener((e) => {
+		e.preventDefault();
+		makeDownloadUrl();
+		e.target.click()
+	})
 
 	showResult();
 
@@ -44,13 +49,15 @@ $(function () {
 			var json_str = $(".result").val(),
 				json_obj = JSON.parse(json_str),
 				top = $("#jsonEditor").offset().top;
-			$(".parse_error").addClass("hide");
+			$(".parse_error").addClass("hidden");
+			$(".download__btn").removeClass("hidden");
 			json.makeJSON(json_obj);
 			scrollTop(top - 10);
 		} catch (e) {
 			var msg = "Error : " + e.message,
 				top = $(".result_pad").offset().top;
 			$(".parse_error").removeClass("hide").html(msg);
+			$(".download__btn").addClass("hidden");
 			scrollTop(top);
 		}
 	});
