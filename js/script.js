@@ -36,7 +36,7 @@ $(function () {
 		scrollTop(top);
 	});
 
-	$('.download__btn').get(0).addEventListener((e) => {
+	$('.download__btn').get(0).addEventListener('click',(e) => {
 		e.preventDefault();
 		makeDownloadUrl();
 		e.target.click()
